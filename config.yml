@@ -1,0 +1,417 @@
+# Please do not edit width, length and height
+# As multi-block furniture has not been implemented yet
+# And if you do, stuff might break in a future update
+Furniture:
+  oak_table:
+    display: '&fOak Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 1
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  spruce_table:
+    display: '&fSpruce Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 2
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  birch_table:
+    display: '&fBirch Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 3
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  jungle_table:
+    display: '&fJungle Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 4
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  acacia_table:
+    display: '&fAcacia Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 5
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  dark_oak_table:
+    display: '&fDark Oak Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 6
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  crimson_table:
+    display: '&fCrimson Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 7
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  warped_table:
+    display: '&fWarped Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 8
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  coffee_table:
+    display: '&fCoffee Table'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 9
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  oak_chair:
+    display: '&fOak Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 10
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  spruce_chair:
+    display: '&fSpruce Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 11
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  birch_chair:
+    display: '&fBirch Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 12
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  jungle_chair:
+    display: '&fJungle Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 13
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  acacia_chair:
+    display: '&fAcacia Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 14
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  dark_oak_chair:
+    display: '&fDark Oak Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 15
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  crimson_chair:
+    display: '&fCrimson Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 16
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  warped_chair:
+    display: '&fWarped Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 17
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  white_armchair:
+    display: '&fWhite Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 18
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  orange_armchair:
+    display: '&fOrange Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 19
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  magenta_armchair:
+    display: '&fMagenta Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 20
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  light_blue_armchair:
+    display: '&fLight Blue Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 21
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  yellow_armchair:
+    display: '&fYellow Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 22
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  lime_armchair:
+    display: '&fLime Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 23
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  pink_armchair:
+    display: '&fPink Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 24
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  gray_armchair:
+    display: '&fGray Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 25
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  light_gray_armchair:
+    display: '&fLight Gray Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 26
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  cyan_armchair:
+    display: '&fCyan Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 27
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  purple_armchair:
+    display: '&fPurple Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 28
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  blue_armchair:
+    display: '&fBlue Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 29
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  brown_armchair:
+    display: '&fBrown Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 30
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  green_armchair:
+    display: '&fGreen Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 31
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  red_armchair:
+    display: '&fRed Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 32
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  black_armchair:
+    display: '&fBlack Armchair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 33
+    chair:
+      enabled: true
+      yoffset: 0
+    commands: {}
+  oak_desk:
+    display: '&fOak Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 34
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  spruce_desk:
+    display: '&fSpruce Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 35
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  birch_desk:
+    display: '&fBirch Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 36
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  jungle_desk:
+    display: '&fJungle Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 37
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  acacia_desk:
+    display: '&fAcacia Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 38
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  dark_oak_desk:
+    display: '&fDark Oak Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 39
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  crimson_desk:
+    display: '&fCrimson Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 40
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+  warped_desk:
+    display: '&fWarped Desk'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 41
+    chair:
+      enabled: false
+      yoffset: 0
+    commands: {}
+Options:
+  check-place-permissions: true
+  check-break-permissions: true

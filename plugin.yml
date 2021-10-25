@@ -1,0 +1,28 @@
+name: FurnitureEngine
+version: 1.0
+main: me.mira.furnitureengine.Main
+author: Mira
+api-version: 1.16
+description: Allows you to make custom usable furniture.
+load: STARTUP
+softdepend: [GSit]
+
+commands:
+  furnitureengine:
+   description: Main Plugin command.
+   aliases: [fe]
+   permission: furnitureengine.admin
+
+permissions:
+  furnitureengine.blockbreak:
+   default: op
+  furnitureengine.blockplace:
+   default: op
+  furnitureengine.admin:
+   default: op
+  furnitureengine.*:
+   default: op
+   children:
+     furnitureengine.admin: true
+     furnitureengine.blockbreak: true
+     furnitureengine.blockplace: true

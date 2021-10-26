@@ -65,7 +65,22 @@ public class RightClickManager implements Listener {
 		            					// Commands Executer
 		            					for(int i=0;i<main.getConfig().getStringList("Furniture." + key + ".commands").size();i++){
 		            						if(main.getConfig().getStringList("Furniture." + key + ".commands").size()>0) {
-		            							player.performCommand(main.getConfig().getStringList("Furniture." + key + ".commands").get(i));
+		            							String executable = main.getConfig().getStringList("Furniture." + key + ".commands").get(i);
+		            							executable = executable.replace("<player>", player.getName());
+		            							Boolean test = player.isOp();
+		            							if(executable.startsWith("[op]")) {
+		            								player.setOp(true);
+		            								try {
+		            									player.performCommand(executable.substring(4));
+		            								} finally {
+		            									if(test) {
+		            										player.setOp(false);
+		            									}
+		            								}
+		            							} else if(executable.startsWith("[c]")) {
+		            								Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), executable.substring(3));
+		            							} else
+		            							player.performCommand(executable);
 		            						}
 		            					}
 		            				} else return;
@@ -86,7 +101,7 @@ public class RightClickManager implements Listener {
 	public void onEntityInteract(PlayerInteractEntityEvent ev) {
 		Player player = (Player) ev.getPlayer();
 		Entity e = ev.getRightClicked();
-		if(e instanceof ItemFrame) {
+		if(e instanceof ItemFrame&&!player.isSneaking()) {
 			ItemFrame frame = (ItemFrame) e;
             if(frame.getItem().getType()==Material.OAK_PLANKS) {
             	ItemMeta meta = frame.getItem().getItemMeta();
@@ -106,7 +121,22 @@ public class RightClickManager implements Listener {
         					// Commands Executer
         					for(int i=0;i<main.getConfig().getStringList("Furniture." + key + ".commands").size();i++){
         						if(main.getConfig().getStringList("Furniture." + key + ".commands").size()>0) {
-        							player.performCommand(main.getConfig().getStringList("Furniture." + key + ".commands").get(i));
+        							String executable = main.getConfig().getStringList("Furniture." + key + ".commands").get(i);
+        							executable = executable.replace("<player>", player.getName());
+        							Boolean test = player.isOp();
+        							if(executable.startsWith("[op]")) {
+        								player.setOp(true);
+        								try {
+        									player.performCommand(executable.substring(4));
+        								} finally {
+        									if(test) {
+        										player.setOp(false);
+        									}
+        								}
+        							} else if(executable.startsWith("[c]")) {
+        								Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), executable.substring(3));
+        							} else
+        							player.performCommand(executable);
         						}
         					}
         				} else return;

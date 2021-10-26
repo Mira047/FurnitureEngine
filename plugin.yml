@@ -1,5 +1,5 @@
 name: FurnitureEngine
-version: 1.0
+version: 1.1.1
 main: me.mira.furnitureengine.Main
 author: Mira
 api-version: 1.16
@@ -15,9 +15,9 @@ commands:
 
 permissions:
   furnitureengine.blockbreak:
-   default: op
+   default: true
   furnitureengine.blockplace:
-   default: op
+   default: true
   furnitureengine.admin:
    default: op
   furnitureengine.*:

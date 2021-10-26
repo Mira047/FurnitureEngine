@@ -2,6 +2,17 @@
 # As multi-block furniture has not been implemented yet
 # And if you do, stuff might break in a future update
 Furniture:
+  stool:
+    display: '&fStool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 42
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
   oak_table:
     display: '&fOak Table'
     width: 1
@@ -11,6 +22,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   spruce_table:
     display: '&fSpruce Table'
@@ -21,6 +33,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   birch_table:
     display: '&fBirch Table'
@@ -31,6 +44,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   jungle_table:
     display: '&fJungle Table'
@@ -41,6 +55,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   acacia_table:
     display: '&fAcacia Table'
@@ -51,6 +66,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   dark_oak_table:
     display: '&fDark Oak Table'
@@ -61,6 +77,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   crimson_table:
     display: '&fCrimson Table'
@@ -71,6 +88,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   warped_table:
     display: '&fWarped Table'
@@ -81,6 +99,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   coffee_table:
     display: '&fCoffee Table'
@@ -91,6 +110,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   oak_chair:
     display: '&fOak Chair'
@@ -101,6 +121,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   spruce_chair:
     display: '&fSpruce Chair'
@@ -111,6 +132,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   birch_chair:
     display: '&fBirch Chair'
@@ -121,6 +143,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   jungle_chair:
     display: '&fJungle Chair'
@@ -131,6 +154,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   acacia_chair:
     display: '&fAcacia Chair'
@@ -141,6 +165,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   dark_oak_chair:
     display: '&fDark Oak Chair'
@@ -151,6 +176,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   crimson_chair:
     display: '&fCrimson Chair'
@@ -161,6 +187,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   warped_chair:
     display: '&fWarped Chair'
@@ -171,6 +198,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   white_armchair:
     display: '&fWhite Armchair'
@@ -181,6 +209,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   orange_armchair:
     display: '&fOrange Armchair'
@@ -191,6 +220,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   magenta_armchair:
     display: '&fMagenta Armchair'
@@ -201,6 +231,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   light_blue_armchair:
     display: '&fLight Blue Armchair'
@@ -211,6 +242,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   yellow_armchair:
     display: '&fYellow Armchair'
@@ -221,6 +253,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   lime_armchair:
     display: '&fLime Armchair'
@@ -231,6 +264,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   pink_armchair:
     display: '&fPink Armchair'
@@ -241,6 +275,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   gray_armchair:
     display: '&fGray Armchair'
@@ -251,6 +286,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   light_gray_armchair:
     display: '&fLight Gray Armchair'
@@ -261,6 +297,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   cyan_armchair:
     display: '&fCyan Armchair'
@@ -271,6 +308,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   purple_armchair:
     display: '&fPurple Armchair'
@@ -281,6 +319,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   blue_armchair:
     display: '&fBlue Armchair'
@@ -291,6 +330,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   brown_armchair:
     display: '&fBrown Armchair'
@@ -301,6 +341,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   green_armchair:
     display: '&fGreen Armchair'
@@ -311,6 +352,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   red_armchair:
     display: '&fRed Armchair'
@@ -321,6 +363,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   black_armchair:
     display: '&fBlack Armchair'
@@ -331,6 +374,7 @@ Furniture:
     chair:
       enabled: true
       yoffset: 0
+    full-rotate: true
     commands: {}
   oak_desk:
     display: '&fOak Desk'
@@ -341,6 +385,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   spruce_desk:
     display: '&fSpruce Desk'
@@ -351,6 +396,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   birch_desk:
     display: '&fBirch Desk'
@@ -361,6 +407,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   jungle_desk:
     display: '&fJungle Desk'
@@ -371,6 +418,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   acacia_desk:
     display: '&fAcacia Desk'
@@ -381,6 +429,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   dark_oak_desk:
     display: '&fDark Oak Desk'
@@ -391,6 +440,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   crimson_desk:
     display: '&fCrimson Desk'
@@ -401,6 +451,7 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
   warped_desk:
     display: '&fWarped Desk'
@@ -411,7 +462,361 @@ Furniture:
     chair:
       enabled: false
       yoffset: 0
+    full-rotate: true
     commands: {}
+  white_stool:
+    display: '&fWhite Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 43
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  orange_stool:
+    display: '&fOrange Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 44
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  magenta_stool:
+    display: '&fMagenta Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 45
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  light_blue_stool:
+    display: '&fLight Blue Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 46
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  yellow_stool:
+    display: '&fYellow Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 47
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  lime_stool:
+    display: '&fLime Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 48
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  pink_stool:
+    display: '&fPink Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 49
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  gray_stool:
+    display: '&fGray Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 50
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  light_gray_stool:
+    display: '&fLight Gray Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 51
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  cyan_stool:
+    display: '&fCyan Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 52
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  purple_stool:
+    display: '&fPurple Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 53
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  blue_stool:
+    display: '&fBlue Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 54
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  brown_stool:
+    display: '&fBrown Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 55
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  green_stool:
+    display: '&fGreen Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 56
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  red_stool:
+    display: '&fRed Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 57
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  black_stool:
+    display: '&fBlack Stool'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 58
+    chair:
+      enabled: true
+      yoffset: -0.1
+    full-rotate: true
+    commands: {}
+  white_office_chair:
+    display: '&fWhite Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 59
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  orange_office_chair:
+    display: '&fOrange Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 60
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  magenta_office_chair:
+    display: '&fMagenta Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 61
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  light_blue_office_chair:
+    display: '&fLight Blue Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 62
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  yellow_office_chair:
+    display: '&fYellow Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 63
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  lime_office_chair:
+    display: '&fLime Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 64
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  pink_office_chair:
+    display: '&fPink Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 65
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  gray_office_chair:
+    display: '&fGray Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 66
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  light_gray_office_chair:
+    display: '&fLight Gray Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 67
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  cyan_office_chair:
+    display: '&fCyan Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 68
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  purple_office_chair:
+    display: '&fPurple Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 69
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  blue_office_chair:
+    display: '&fBlue Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 70
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  brown_office_chair:
+    display: '&fBrown Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 71
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  green_office_chair:
+    display: '&fGreen Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 72
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  red_office_chair:
+    display: '&fRed Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 73
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+  black_office_chair:
+    display: '&fBlack Office Chair'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 74
+    chair:
+      enabled: true
+      yoffset: 0
+    full-rotate: true
+    commands: {}
+    
 Options:
   check-place-permissions: true
   check-break-permissions: true

@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import me.mira.furnitureengine.bstats.Metrics;
 import me.mira.furnitureengine.commands.CoreCommand;
 import me.mira.furnitureengine.commands.CoreTabCompleter;
 import me.mira.furnitureengine.eventManager.RightClickManager;
@@ -35,6 +36,11 @@ public final class Main extends JavaPlugin {
 	  new RightClickManager(this);
 	  new FurniturePlace(this);
 	  
+	  // BStats
+	  
+	  int pluginId = 13146; // <-- Replace with the id of your plugin!
+      @SuppressWarnings("unused")
+      Metrics metrics = new Metrics(this, pluginId);
 	  
   }
   

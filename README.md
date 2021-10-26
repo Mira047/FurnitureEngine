@@ -4,6 +4,7 @@ FurnitureEngine allows you to easily make and fully customize simple furniture (
 The plugin uses item frames and resource packs instead of armor stands, for a lag free experience. 
 
 I have also offered some **Default Furniture** and a **Default Resource Pack** that you can use on your server at any time without attribution.
+
 [Click for Default Resource Pack](https://www.dropbox.com/s/moa647omeg8jldk/FurnitureEngine%20Default%20Pack%20V1.2.zip?dl=0)
 
 ### Dependencies:

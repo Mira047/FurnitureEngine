@@ -31,98 +31,67 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import me.mira.furnitureengine.Main;
 
 public class FurnitureBreak implements Listener {
-	Main main = Main.getPlugin(Main.class);
-	public Location furnitureLocation;
-	
-	public FurnitureBreak(Main plugin) {
-		plugin.getServer().getPluginManager().registerEvents(this, (Plugin)plugin);
-	}
-	
-	@EventHandler
-	public void onBlockInteract(PlayerInteractEvent e) {
-		if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
-			Player player = (Player) e.getPlayer();
-			Block clicked = e.getClickedBlock();
-			if(main.wg!=null) {
-				Location location = new Location(clicked.getWorld(),clicked.getX(),clicked.getY(),clicked.getZ());
-				@SuppressWarnings("static-access")
-				LocalPlayer localPlayer = main.wg.inst().wrapPlayer(player);
-				RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-				RegionQuery query = container.createQuery();
-				if(clicked.getType()==Material.BARRIER&&(player.hasPermission("furnitureengine.blockbreak")||main.getConfig().getBoolean("Options.check-place-permissions")==false)&&(query.testBuild(BukkitAdapter.adapt(location), localPlayer, Flags.BLOCK_BREAK)||player.hasPermission("furnitureengine.admin"))) {	
-					List<Entity> nearbyEntites = (List<Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
-					for (Entity nearbyEntity : nearbyEntites) {
-		                if (nearbyEntity instanceof ItemFrame) {
+    Main main = Main.getPlugin(Main.class);
+    public Location furnitureLocation;
 
-		                    ItemFrame frame = (ItemFrame) nearbyEntity;
-		                    if(frame.getItem().getType()==Material.OAK_PLANKS) {
-		                    	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
-		                    		if(main.getConfig().getInt("Furniture." + key + ".custommodeldata")==frame.getItem().getItemMeta().getCustomModelData()) {
-		                    			if(frame.getLocation().getBlock().getLocation().getY()-1==clicked.getLocation().getY()&&frame.getLocation().getBlock().getLocation().getX()==clicked.getLocation().getX()&&frame.getLocation().getBlock().getLocation().getZ()==clicked.getLocation().getZ()) {
-		                    				FurnitureBreakEvent event = new FurnitureBreakEvent(player, clicked.getLocation());
-		                					Bukkit.getServer().getPluginManager().callEvent(event);
-		                					if(!event.isCancelled()) {
-		                						frame.remove();
-			                    				if(player.getGameMode()!=GameMode.CREATIVE) {
-					                    			clicked.breakNaturally();
-						                    		
-						                    		Location loc = clicked.getLocation();
-						                    		
-						                    		player.playSound(loc, Sound.BLOCK_WOOD_BREAK, 3, 1);
-						                    		if(event.isDroppingItems()) {
-						                    			Util.dropItem(key,loc);
-						                    		}
-					                    		}
-		                					}	
-		                    			}
+    public FurnitureBreak(Main plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, (Plugin) plugin);
+    }
 
-			            				
-			            				return;
-		                    		}
-		            			});
-		                    }
-		                }
-			
+    @EventHandler
+    public void onBlockInteract(PlayerInteractEvent e) {
+        if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+            Player player = (Player) e.getPlayer();
+            Block clicked = e.getClickedBlock();
+            if (main.wg != null) {
+                Location location = new Location(clicked.getWorld(), clicked.getX(), clicked.getY(), clicked.getZ());
+                @SuppressWarnings("static-access")
+                LocalPlayer localPlayer = main.wg.inst().wrapPlayer(player);
+                RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                RegionQuery query = container.createQuery();
 
-			
-					}
-					
-				}
-			} else
-			if(clicked.getType()==Material.BARRIER&&(player.hasPermission("furnitureengine.blockbreak")||main.getConfig().getBoolean("Options.check-place-permissions")==false)) {	
-				List<Entity> nearbyEntites = (List<Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
-				for (Entity nearbyEntity : nearbyEntites) {
-	                if (nearbyEntity instanceof ItemFrame) {
-	                    ItemFrame frame = (ItemFrame) nearbyEntity;
-	                    if(frame.getItem().getType()==Material.OAK_PLANKS) {
-	                    	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
-	                    		if(main.getConfig().getInt("Furniture." + key + ".custommodeldata")==frame.getItem().getItemMeta().getCustomModelData()) {
-	                    			if(frame.getLocation().getBlock().getLocation().getY()-1==clicked.getLocation().getY()&&frame.getLocation().getBlock().getLocation().getX()==clicked.getLocation().getX()&&frame.getLocation().getBlock().getLocation().getZ()==clicked.getLocation().getZ()) {
-	                    				frame.remove();
-	                    				if(player.getGameMode()!=GameMode.CREATIVE) {
-			                    			clicked.breakNaturally();
-				                    		
-				                    		Location loc = clicked.getLocation();
-				                    		
-				                    		player.playSound(loc, Sound.BLOCK_WOOD_BREAK, 3, 1);
-			                    			Util.dropItem(key,loc);
-			                    		}
-	                    			}
+                if (clicked.getType() == Material.BARRIER && (player.hasPermission("furnitureengine.blockbreak") || main.getConfig().getBoolean("Options.check-place-permissions") == false) && (query.testBuild(BukkitAdapter.adapt(location), localPlayer, Flags.BLOCK_BREAK) || player.hasPermission("furnitureengine.admin"))) {
+                    BreakBlock(clicked, player);
+                }
+            } else
+            if (clicked.getType() == Material.BARRIER && (player.hasPermission("furnitureengine.blockbreak") || main.getConfig().getBoolean("Options.check-place-permissions") == false)) {
+                BreakBlock(clicked, player);
+            }
+        }
+        return;
+    }
 
-		            				
-		            				return;
-	                    		}
-	            			});
-	                    }
-	                }
-		
+    private void BreakBlock(Block clicked, Player player) {
+        List < Entity > nearbyEntites = (List < Entity > ) clicked.getWorld().getNearbyEntities(clicked.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+        for (Entity nearbyEntity: nearbyEntites) {
+            if (nearbyEntity instanceof ItemFrame) {
+                ItemFrame frame = (ItemFrame) nearbyEntity;
+                if (frame.getItem().getType() == Material.OAK_PLANKS) {
+                    main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
+                        if (main.getConfig().getInt("Furniture." + key + ".custommodeldata") == frame.getItem().getItemMeta().getCustomModelData()) {
+                            if (frame.getLocation().getBlock().getLocation().getY() - 1 == clicked.getLocation().getY() && frame.getLocation().getBlock().getLocation().getX() == clicked.getLocation().getX() && frame.getLocation().getBlock().getLocation().getZ() == clicked.getLocation().getZ()) {
+                                FurnitureBreakEvent event = new FurnitureBreakEvent(player, clicked.getLocation());
+                                Bukkit.getServer().getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    frame.remove();
+                                    if (player.getGameMode() != GameMode.CREATIVE) {
+                                        clicked.breakNaturally();
 
-		
-				}
-				
-			}
-		}
-		return;
-	}
+                                        Location loc = clicked.getLocation();
 
+                                        player.playSound(loc, Sound.BLOCK_WOOD_BREAK, 3, 1);
+                                        if (event.isDroppingItems()) {
+                                            Util.dropItem(key, loc);
+                                        }
+                                        Util.executeCommand("block-break", player, key);
+                                    }
+                                }
+                            }
+                            return;
+                        }
+                    });
+                }
+            }
+        }
+    }
 }

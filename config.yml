@@ -2,17 +2,6 @@
 # As multi-block furniture has not been implemented yet
 # And if you do, stuff might break in a future update
 Furniture:
-  stool:
-    display: '&fStool'
-    width: 1
-    length: 1
-    height: 1
-    custommodeldata: 42
-    chair:
-      enabled: true
-      yoffset: 0
-    full-rotate: true
-    commands: {}
   oak_table:
     display: '&fOak Table'
     width: 1
@@ -23,7 +12,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   spruce_table:
     display: '&fSpruce Table'
     width: 1
@@ -34,7 +26,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   birch_table:
     display: '&fBirch Table'
     width: 1
@@ -45,7 +40,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   jungle_table:
     display: '&fJungle Table'
     width: 1
@@ -56,7 +54,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   acacia_table:
     display: '&fAcacia Table'
     width: 1
@@ -67,7 +68,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   dark_oak_table:
     display: '&fDark Oak Table'
     width: 1
@@ -78,7 +82,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   crimson_table:
     display: '&fCrimson Table'
     width: 1
@@ -89,7 +96,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   warped_table:
     display: '&fWarped Table'
     width: 1
@@ -100,7 +110,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   coffee_table:
     display: '&fCoffee Table'
     width: 1
@@ -111,7 +124,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   oak_chair:
     display: '&fOak Chair'
     width: 1
@@ -122,7 +138,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   spruce_chair:
     display: '&fSpruce Chair'
     width: 1
@@ -133,7 +152,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   birch_chair:
     display: '&fBirch Chair'
     width: 1
@@ -144,7 +166,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   jungle_chair:
     display: '&fJungle Chair'
     width: 1
@@ -155,7 +180,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   acacia_chair:
     display: '&fAcacia Chair'
     width: 1
@@ -166,7 +194,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   dark_oak_chair:
     display: '&fDark Oak Chair'
     width: 1
@@ -177,7 +208,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   crimson_chair:
     display: '&fCrimson Chair'
     width: 1
@@ -188,7 +222,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   warped_chair:
     display: '&fWarped Chair'
     width: 1
@@ -199,7 +236,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   white_armchair:
     display: '&fWhite Armchair'
     width: 1
@@ -210,7 +250,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   orange_armchair:
     display: '&fOrange Armchair'
     width: 1
@@ -221,7 +264,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   magenta_armchair:
     display: '&fMagenta Armchair'
     width: 1
@@ -232,7 +278,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_blue_armchair:
     display: '&fLight Blue Armchair'
     width: 1
@@ -243,7 +292,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   yellow_armchair:
     display: '&fYellow Armchair'
     width: 1
@@ -254,7 +306,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   lime_armchair:
     display: '&fLime Armchair'
     width: 1
@@ -265,7 +320,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   pink_armchair:
     display: '&fPink Armchair'
     width: 1
@@ -276,7 +334,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   gray_armchair:
     display: '&fGray Armchair'
     width: 1
@@ -287,7 +348,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_gray_armchair:
     display: '&fLight Gray Armchair'
     width: 1
@@ -298,7 +362,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   cyan_armchair:
     display: '&fCyan Armchair'
     width: 1
@@ -309,7 +376,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   purple_armchair:
     display: '&fPurple Armchair'
     width: 1
@@ -320,7 +390,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   blue_armchair:
     display: '&fBlue Armchair'
     width: 1
@@ -331,7 +404,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   brown_armchair:
     display: '&fBrown Armchair'
     width: 1
@@ -342,7 +418,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   green_armchair:
     display: '&fGreen Armchair'
     width: 1
@@ -353,7 +432,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   red_armchair:
     display: '&fRed Armchair'
     width: 1
@@ -364,7 +446,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   black_armchair:
     display: '&fBlack Armchair'
     width: 1
@@ -375,7 +460,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   oak_desk:
     display: '&fOak Desk'
     width: 1
@@ -386,7 +474,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   spruce_desk:
     display: '&fSpruce Desk'
     width: 1
@@ -397,7 +488,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   birch_desk:
     display: '&fBirch Desk'
     width: 1
@@ -408,7 +502,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   jungle_desk:
     display: '&fJungle Desk'
     width: 1
@@ -419,7 +516,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   acacia_desk:
     display: '&fAcacia Desk'
     width: 1
@@ -430,7 +530,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   dark_oak_desk:
     display: '&fDark Oak Desk'
     width: 1
@@ -441,7 +544,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   crimson_desk:
     display: '&fCrimson Desk'
     width: 1
@@ -452,7 +558,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   warped_desk:
     display: '&fWarped Desk'
     width: 1
@@ -463,7 +572,10 @@ Furniture:
       enabled: false
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   white_stool:
     display: '&fWhite Stool'
     width: 1
@@ -474,7 +586,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   orange_stool:
     display: '&fOrange Stool'
     width: 1
@@ -485,7 +600,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   magenta_stool:
     display: '&fMagenta Stool'
     width: 1
@@ -496,7 +614,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_blue_stool:
     display: '&fLight Blue Stool'
     width: 1
@@ -507,7 +628,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   yellow_stool:
     display: '&fYellow Stool'
     width: 1
@@ -518,7 +642,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   lime_stool:
     display: '&fLime Stool'
     width: 1
@@ -529,7 +656,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   pink_stool:
     display: '&fPink Stool'
     width: 1
@@ -540,7 +670,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   gray_stool:
     display: '&fGray Stool'
     width: 1
@@ -551,7 +684,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_gray_stool:
     display: '&fLight Gray Stool'
     width: 1
@@ -562,7 +698,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   cyan_stool:
     display: '&fCyan Stool'
     width: 1
@@ -573,7 +712,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   purple_stool:
     display: '&fPurple Stool'
     width: 1
@@ -584,7 +726,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   blue_stool:
     display: '&fBlue Stool'
     width: 1
@@ -595,7 +740,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   brown_stool:
     display: '&fBrown Stool'
     width: 1
@@ -606,7 +754,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   green_stool:
     display: '&fGreen Stool'
     width: 1
@@ -617,7 +768,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   red_stool:
     display: '&fRed Stool'
     width: 1
@@ -628,7 +782,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   black_stool:
     display: '&fBlack Stool'
     width: 1
@@ -639,7 +796,10 @@ Furniture:
       enabled: true
       yoffset: -0.1
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   white_office_chair:
     display: '&fWhite Office Chair'
     width: 1
@@ -650,7 +810,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   orange_office_chair:
     display: '&fOrange Office Chair'
     width: 1
@@ -661,7 +824,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   magenta_office_chair:
     display: '&fMagenta Office Chair'
     width: 1
@@ -672,7 +838,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_blue_office_chair:
     display: '&fLight Blue Office Chair'
     width: 1
@@ -683,7 +852,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   yellow_office_chair:
     display: '&fYellow Office Chair'
     width: 1
@@ -694,7 +866,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   lime_office_chair:
     display: '&fLime Office Chair'
     width: 1
@@ -705,7 +880,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   pink_office_chair:
     display: '&fPink Office Chair'
     width: 1
@@ -716,7 +894,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   gray_office_chair:
     display: '&fGray Office Chair'
     width: 1
@@ -727,7 +908,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   light_gray_office_chair:
     display: '&fLight Gray Office Chair'
     width: 1
@@ -738,7 +922,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   cyan_office_chair:
     display: '&fCyan Office Chair'
     width: 1
@@ -749,7 +936,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   purple_office_chair:
     display: '&fPurple Office Chair'
     width: 1
@@ -760,7 +950,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   blue_office_chair:
     display: '&fBlue Office Chair'
     width: 1
@@ -771,7 +964,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   brown_office_chair:
     display: '&fBrown Office Chair'
     width: 1
@@ -782,7 +978,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   green_office_chair:
     display: '&fGreen Office Chair'
     width: 1
@@ -793,7 +992,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   red_office_chair:
     display: '&fRed Office Chair'
     width: 1
@@ -804,7 +1006,10 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
   black_office_chair:
     display: '&fBlack Office Chair'
     width: 1
@@ -815,8 +1020,11 @@ Furniture:
       enabled: true
       yoffset: 0
     full-rotate: true
-    commands: {}
-    
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
 Options:
-  check-place-permissions: true
-  check-break-permissions: true
+    check-for-updates: true
+    check-place-permissions: true
+    check-break-permissions: true

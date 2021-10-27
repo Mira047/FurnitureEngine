@@ -15,16 +15,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import me.gsit.api.GSitAPI;
 import me.gsit.objects.Seat;
 import me.mira.furnitureengine.Main;
+import me.mira.furnitureengine.Util;
 import me.mira.furnitureengine.events.FurnitureInteractEvent;
+import net.md_5.bungee.api.ChatColor;
 
 public class RightClickManager implements Listener {
-	Main main = Main.getPlugin(Main.class);
+	static Main main = Main.getPlugin(Main.class);
 	Seat seat;
 	GSitAPI gsitapi;
 	
@@ -36,6 +39,10 @@ public class RightClickManager implements Listener {
 	// Manages Block Interaction
 	@EventHandler
 	public void onBlockInteract(PlayerInteractEvent e) {
+		if(e.getHand().toString().equals("OFF_HAND")) {
+			e.setCancelled(true);
+			return;
+		}
 		Player player = (Player) e.getPlayer();
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK&&!player.isSneaking()) {
 			Block clicked = e.getClickedBlock();
@@ -51,39 +58,7 @@ public class RightClickManager implements Listener {
 	                    	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
 	                    		if(frame.getLocation().getBlock().getLocation().getY()-1==clicked.getLocation().getY()&&frame.getLocation().getBlock().getLocation().getX()==clicked.getLocation().getX()&&frame.getLocation().getBlock().getLocation().getZ()==clicked.getLocation().getZ()) {
 		            				if(meta.getCustomModelData()==main.getConfig().getInt("Furniture." + key+".custommodeldata")) {
-		            					FurnitureInteractEvent event = new FurnitureInteractEvent(player, clicked.getLocation());
-	                					Bukkit.getServer().getPluginManager().callEvent(event);
-	                					if(!event.isCancelled()) {
-		            					// Sitting
-		            					if(main.getConfig().getBoolean("Furniture." + key+".chair.enabled")==true) {
-		            						GSitAPI gsitapi = new GSitAPI();
-		            						Double yoffset = main.getConfig().getDouble("Furniture." + key+".chair.yoffset");
-		            						Location SeatLocation = new Location(clicked.getWorld(), clicked.getX(),clicked.getY(),clicked.getZ());
-		            						gsitapi.setPlayerSeat(player, SeatLocation, 0, 0.7+yoffset, 0, 0, SeatLocation, true, false);
-		            						return;
-		            					}
-		            					// Commands Executer
-		            					for(int i=0;i<main.getConfig().getStringList("Furniture." + key + ".commands").size();i++){
-		            						if(main.getConfig().getStringList("Furniture." + key + ".commands").size()>0) {
-		            							String executable = main.getConfig().getStringList("Furniture." + key + ".commands").get(i);
-		            							executable = executable.replace("<player>", player.getName());
-		            							Boolean test = player.isOp();
-		            							if(executable.startsWith("[op]")) {
-		            								player.setOp(true);
-		            								try {
-		            									player.performCommand(executable.substring(4));
-		            								} finally {
-		            									if(test) {
-		            										player.setOp(false);
-		            									}
-		            								}
-		            							} else if(executable.startsWith("[c]")) {
-		            								Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), executable.substring(3));
-		            							} else
-		            							player.performCommand(executable);
-		            						}
-		            					}
-		            				} else return;
+		            					executeAction(player, frame, key);
 		            				}
 	                    		}
 	            				
@@ -107,45 +82,49 @@ public class RightClickManager implements Listener {
             	ItemMeta meta = frame.getItem().getItemMeta();
             	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
         				if(meta.getCustomModelData()==main.getConfig().getInt("Furniture." + key+".custommodeldata")) {
-        					FurnitureInteractEvent event = new FurnitureInteractEvent(player, frame.getLocation().getBlock().getLocation());
-        					Bukkit.getServer().getPluginManager().callEvent(event);
-        					if(!event.isCancelled()) {
-        					// Sitting
-        					if(main.getConfig().getBoolean("Furniture." + key+".chair.enabled")==true) {
-        						GSitAPI gsitapi = new GSitAPI();
-        						Double yoffset = main.getConfig().getDouble("Furniture." + key+".chair.yoffset");
-        						Location SeatLocation = new Location(frame.getLocation().getBlock().getLocation().getWorld(), frame.getLocation().getBlock().getLocation().getX(),frame.getLocation().getBlock().getLocation().getY()-1,frame.getLocation().getBlock().getLocation().getZ());
-        						gsitapi.setPlayerSeat(player, SeatLocation, 0, 0.7+yoffset, 0, 0, SeatLocation, true, false);
-        						return;
-        					}
-        					// Commands Executer
-        					for(int i=0;i<main.getConfig().getStringList("Furniture." + key + ".commands").size();i++){
-        						if(main.getConfig().getStringList("Furniture." + key + ".commands").size()>0) {
-        							String executable = main.getConfig().getStringList("Furniture." + key + ".commands").get(i);
-        							executable = executable.replace("<player>", player.getName());
-        							Boolean test = player.isOp();
-        							if(executable.startsWith("[op]")) {
-        								player.setOp(true);
-        								try {
-        									player.performCommand(executable.substring(4));
-        								} finally {
-        									if(test) {
-        										player.setOp(false);
-        									}
-        								}
-        							} else if(executable.startsWith("[c]")) {
-        								Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), executable.substring(3));
-        							} else
-        							player.performCommand(executable);
-        						}
-        					}
-        				} else return;
+        					executeAction(player, frame, key);
         				}
             		
     				
     				return;
     			});
-		}
+            }
 		}
 	}
+	
+	public static void executeAction(Player player, ItemFrame frame, String key) {
+		FurnitureInteractEvent event = new FurnitureInteractEvent(player, frame.getLocation().getBlock().getLocation());
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if(!event.isCancelled()) {
+		// Sitting
+		if(main.getConfig().getBoolean("Furniture." + key+".chair.enabled")==true) {
+			if(Bukkit.getServer().getPluginManager().getPlugin("GSit")!=null) {
+				GSitAPI gsitapi = new GSitAPI();
+				Double yoffset = main.getConfig().getDouble("Furniture." + key+".chair.yoffset");
+				Location SeatLocation = new Location(frame.getLocation().getBlock().getLocation().getWorld(), frame.getLocation().getBlock().getLocation().getX(),frame.getLocation().getBlock().getLocation().getY()-1,frame.getLocation().getBlock().getLocation().getZ());
+				if(gsitapi.getSeats(SeatLocation.getBlock()).size()==0&&gsitapi.getPlayerToggleState(player)==true) {
+					gsitapi.setPlayerSeat(player, SeatLocation, 0, 0.7+yoffset, 0, 0, SeatLocation, true, false);
+				}
+			} else Bukkit.getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "GSit not installed! Sitting failed!");
+			return;
+		}
+		// Commands Executer
+		Util.executeCommand("right-click", player, key);
+		} else return;
+		
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		Player player = e.getPlayer();
+			System.out.println("Player joined");
+			System.out.println(player.isOp());
+			System.out.println(main.getConfig().getBoolean("Options.check-for-updates"));
+			System.out.println(main.updateTest);
+		if(player.isOp()&&main.getConfig().getBoolean("Options.check-for-updates")&&main.updateTest) {
+			player.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "A new version is available: " + ChatColor.RED + "["+ main.version1 + "]" + ChatColor.GRAY + " -> " + ChatColor.GOLD + "[" + main.version2 + "]");
+			player.sendMessage(ChatColor.AQUA + "https://www.spigotmc.org/resources/furnitureengine-1-16-1-17.97134/");
+		}
+	}
+	
 }

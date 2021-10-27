@@ -1,5 +1,6 @@
 package me.mira.furnitureengine;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,11 +14,17 @@ import me.mira.furnitureengine.eventManager.FurnitureBreak;
 import me.mira.furnitureengine.eventManager.FurniturePlace;
 import net.md_5.bungee.api.ChatColor;
 
-public final class Main extends JavaPlugin {
+public final class Main extends JavaPlugin implements Listener {
+
 	public WorldGuardPlugin wg;
+	
+	// public update checker vars
+	public boolean updateTest = false;
+	public String version1 = "";
+	public String version2 = "";
 
 
-  public void onEnable() {	  
+  public void onEnable() {	
 	  getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Furniture Engine enabled!");
 	  
 	  // config setup
@@ -38,10 +45,23 @@ public final class Main extends JavaPlugin {
 	  
 	  // BStats
 	  
-	  int pluginId = 13146; // <-- Replace with the id of your plugin!
+	  int pluginId = 13146;
       @SuppressWarnings("unused")
       Metrics metrics = new Metrics(this, pluginId);
-	  
+  
+	  // Update Checker
+      new UpdateChecker(this, 97134).getVersion(version -> {
+          if (this.getDescription().getVersion().equals(version)) {
+              // Nothing happens;
+          } else {
+        	  updateTest = true;
+        	  version1=this.getDescription().getVersion();
+        	  version2=version;
+        	  
+              getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "A new version is available: " + ChatColor.RED + "["+ version1 + "]" + ChatColor.GRAY + " -> " + ChatColor.GOLD + "[" + version2 + "]");
+              getLogger().info(ChatColor.AQUA + "https://www.spigotmc.org/resources/furnitureengine-1-16-1-17.97134/");
+          }
+      });
   }
   
   public void onDisable() {
@@ -59,13 +79,12 @@ public final class Main extends JavaPlugin {
 
 	    // WorldGuard may not be loaded
 	    if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-	    	getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "WorldGuard not found. Skipping!");
+	    	getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "WorldGuard not found. Skipping!");
 	        return null; // Maybe you want throw an exception instead
 	    }
 
 	    return (WorldGuardPlugin) plugin;
 	}
-	  
   
 
 }

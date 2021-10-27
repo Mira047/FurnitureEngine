@@ -15,9 +15,8 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.gsit.api.GSitAPI;
+import me.mira.furnitureengine.eventManager.RightClickManager;
 import me.mira.furnitureengine.events.FurnitureBreakEvent;
-import me.mira.furnitureengine.events.FurnitureInteractEvent;
 import me.mira.furnitureengine.events.FurniturePlaceEvent;
 
 public class FurnitureAPI {
@@ -98,24 +97,7 @@ public class FurnitureAPI {
                     	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
                     		if(frame.getLocation().getBlock().getLocation().getY()-1==clicked.getLocation().getY()&&frame.getLocation().getBlock().getLocation().getX()==clicked.getLocation().getX()&&frame.getLocation().getBlock().getLocation().getZ()==clicked.getLocation().getZ()) {
 	            				if(meta.getCustomModelData()==main.getConfig().getInt("Furniture." + key+".custommodeldata")) {
-	            					FurnitureInteractEvent event = new FurnitureInteractEvent(player, clicked.getLocation());
-                					Bukkit.getServer().getPluginManager().callEvent(event);
-                					if(!event.isCancelled()) {
-	            					// Sitting
-	            					if(main.getConfig().getBoolean("Furniture." + key+".chair.enabled")==true) {
-	            						GSitAPI gsitapi = new GSitAPI();
-	            						Double yoffset = main.getConfig().getDouble("Furniture." + key+".chair.yoffset");
-	            						Location SeatLocation = new Location(clicked.getWorld(), clicked.getX(),clicked.getY(),clicked.getZ());
-	            						gsitapi.setPlayerSeat(player, SeatLocation, 0, 0.7+yoffset, 0, 0, SeatLocation, true, false);
-	            						return;
-	            					}
-	            					// Commands Executer
-	            					for(int i=0;i<main.getConfig().getStringList("Furniture." + key + ".commands").size();i++){
-	            						if(main.getConfig().getStringList("Furniture." + key + ".commands").size()>0) {
-	            							player.performCommand(main.getConfig().getStringList("Furniture." + key + ".commands").get(i));
-	            						}
-	            					}
-	            				} else return;
+	            					RightClickManager.executeAction(player, frame, key);
 	            				}
                     		}
             				

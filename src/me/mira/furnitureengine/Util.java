@@ -39,6 +39,18 @@ public class Util {
 		return item;
 	}
 	
+	public static ItemStack setItemId(String id) {
+		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);
+		ItemMeta meta = item.getItemMeta();
+		
+		meta.setCustomModelData(main.getConfig().getInt("Furniture." + id + ".custommodeldata"));
+		
+		item.setItemMeta(meta);
+		
+		id=null;
+		return item;
+	}
+	
 	// Sets item but uses id instead of Display Name
 	public static ItemStack setItemWithId(String id) {
 		ItemStack item = new ItemStack(Material.OAK_PLANKS, 1);

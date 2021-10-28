@@ -16,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -39,12 +40,8 @@ public class RightClickManager implements Listener {
 	// Manages Block Interaction
 	@EventHandler
 	public void onBlockInteract(PlayerInteractEvent e) {
-		if(e.getHand().toString().equals("OFF_HAND")) {
-			e.setCancelled(true);
-			return;
-		}
 		Player player = (Player) e.getPlayer();
-		if(e.getAction() == Action.RIGHT_CLICK_BLOCK&&!player.isSneaking()) {
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK&&e.getHand()==EquipmentSlot.HAND&&!player.isSneaking()) {
 			Block clicked = e.getClickedBlock();
 			Location blockLocation = clicked.getLocation();
 			World world = clicked.getWorld();
@@ -117,11 +114,7 @@ public class RightClickManager implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
-			System.out.println("Player joined");
-			System.out.println(player.isOp());
-			System.out.println(main.getConfig().getBoolean("Options.check-for-updates"));
-			System.out.println(main.updateTest);
-		if(player.isOp()&&main.getConfig().getBoolean("Options.check-for-updates")&&main.updateTest) {
+		if(player.hasPermission("furnitureengine.admin")&&main.getConfig().getBoolean("Options.check-for-updates")&&main.updateTest) {
 			player.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "A new version is available: " + ChatColor.RED + "["+ main.version1 + "]" + ChatColor.GRAY + " -> " + ChatColor.GOLD + "[" + main.version2 + "]");
 			player.sendMessage(ChatColor.AQUA + "https://www.spigotmc.org/resources/furnitureengine-1-16-1-17.97134/");
 		}

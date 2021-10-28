@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -25,6 +26,8 @@ public class FurnitureAPI {
 	// Places furniture at location.
 	public void PlaceFurniture(String id, Location blockLocation, Rotation rotation) {
 			Block block = blockLocation.getBlock();
+			Block oldBlock = block;
+			BlockData data = oldBlock.getBlockData();
 			FurniturePlaceEvent event = new FurniturePlaceEvent(null, blockLocation);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 			if(!event.isCancelled()) {
@@ -37,11 +40,15 @@ public class FurnitureAPI {
 				frame.setInvulnerable(true);
 				frame.setFixed(true);
 				frame.setVisible(false);
-				frame.setItem(Util.setItem(id));
+				frame.setItem(Util.setItemId(id));
 				frame.setFacingDirection(BlockFace.UP);
 				
 				// Rotation of item-frame
 				frame.setRotation(rotation);
+				if(frame.getItem()==null) {
+					block.setType(oldBlock.getType());
+					block.setBlockData(data);
+				}
 				return;
 			}
 		}

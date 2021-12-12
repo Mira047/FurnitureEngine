@@ -1,0 +1,25 @@
+# Make sure to check out the wiki and given resource pack / config for help!
+Furniture:
+   example:
+    display: 'Example Furniture'
+    width: 1
+    length: 1
+    height: 1
+    custommodeldata: 2147483647
+    chair:
+      enabled: false
+      yoffset: 0
+    full-rotate: true
+    light-level: 0
+    commands:
+      right-click: {}
+      block-place: {}
+      block-break: {}
+
+Options:
+    check-for-updates: true
+    check-place-permissions: true
+    check-break-permissions: true
+
+# Add worlds here in case you are using plotsquared.
+plot-worlds: {}

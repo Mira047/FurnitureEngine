@@ -1,9 +1,0 @@
-# Please do not edit width, length and height
-# As multi-block furniture has not been implemented yet
-# And if you do, stuff might break in a future update
-Furniture: # Check out the wiki and default resource config for help.
-
-Options:
-    check-for-updates: true
-    check-place-permissions: true
-    check-break-permissions: true

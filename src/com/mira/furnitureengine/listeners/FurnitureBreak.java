@@ -6,9 +6,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+
+import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.EventPriority;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,17 +41,19 @@ public class FurnitureBreak implements Listener {
 	FurnitureEngine main = FurnitureEngine.getPlugin(FurnitureEngine.class);
     public Location furnitureLocation;
     public boolean breakTest;
+    Location loc2;
 
     public FurnitureBreak(FurnitureEngine plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, (Plugin) plugin);
     }
 
-    @EventHandler
-    public void onBlockInteract(PlayerInteractEvent e) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onBlockInteract(final PlayerInteractEvent e) {
     	
         if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
             Player player = (Player) e.getPlayer();
             Block clicked = e.getClickedBlock();
+            
             if (main.wg != null) {
                 Location location = new Location(clicked.getWorld(), clicked.getX(), clicked.getY(), clicked.getZ());
                 @SuppressWarnings("static-access")
@@ -80,7 +85,6 @@ public class FurnitureBreak implements Listener {
                                 FurnitureBreakEvent event = new FurnitureBreakEvent(player, clicked.getLocation());
                                 Bukkit.getServer().getPluginManager().callEvent(event);
                                 if(!Condition.checkForCondition(player, "-OnBlockBreak", key)) event.setCancelled(true);
-                                System.out.println(event.isCancelled());
                                 if (!event.isCancelled()) {
                                 	breakTest=false;
                                 	if(Bukkit.getServer().getPluginManager().getPlugin("PlotSquared")!=null) {
@@ -102,7 +106,6 @@ public class FurnitureBreak implements Listener {
                                 		}
                                 		
                                 	}
-                                	System.out.println(breakTest);
                                 	if(!breakTest) {
                                 		frame.remove();
                                         if(main.getServer().getPluginManager().getPlugin("LightAPI")!=null) {
@@ -114,10 +117,12 @@ public class FurnitureBreak implements Listener {
                                             Location loc = clicked.getLocation();
 
                                             player.playSound(loc, Sound.BLOCK_WOOD_BREAK, 3, 1);
+                                            if(main.getConfig().getBoolean("Furniture." + key + ".cancel-item-drop")) event.dropItems(false);
                                             if (event.isDroppingItems()) {
+                                          
                                                 ItemUtils.giveItem(null, key, 1, loc);
                                             }
-                                            ListenerUtils.executeCommand("block-break", player, key);
+                                            ListenerUtils.executeCommand("block-break", player, key, clicked.getLocation());
                                         }
                                 	}
                                 }
@@ -174,4 +179,10 @@ public class FurnitureBreak implements Listener {
         }
     	return;
     }
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPacketReceiving(final PacketEvent event) {
+        event.setCancelled(false);
+    }
+    
 }

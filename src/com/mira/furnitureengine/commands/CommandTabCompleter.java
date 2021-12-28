@@ -21,6 +21,8 @@ public class CommandTabCompleter implements TabCompleter {
 			List<String> autoCompletion = new ArrayList<>();
 			autoCompletion.add("reload");
 			autoCompletion.add("give");
+			autoCompletion.add("remove");
+			autoCompletion.add("get");
 			
 			return autoCompletion;
 		}
@@ -62,6 +64,28 @@ public class CommandTabCompleter implements TabCompleter {
 			autoCompletion.add(Integer.toString(1));
 			return autoCompletion;
 		}
+		if(args.length == 2&&args[0].equals("remove")) {
+			List<String> autoCompletion = new ArrayList<>();
+			
+			autoCompletion.add("0");
+			
+			return autoCompletion;
+		}
+		if(args.length == 3&&args[0].equals("remove")) {
+			List<String> autoCompletion = new ArrayList<>();
+			
+			autoCompletion.add("0");
+			
+			return autoCompletion;
+		}
+		if(args.length == 4&&args[0].equals("remove")) {
+			List<String> autoCompletion = new ArrayList<>();
+			
+			autoCompletion.add("0");
+			
+			return autoCompletion;
+		}
 		return null;
 	}
+	
 }

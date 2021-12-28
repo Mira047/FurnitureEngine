@@ -9,7 +9,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.mira.furnitureengine.commands.*;
 import com.mira.furnitureengine.listeners.*;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 import com.mira.furnitureengine.Metrics;
 

@@ -40,4 +40,30 @@ public class Utils {
 		}
 		return null;
 	}
+	
+	public static Boolean checkBlock(Block block) {
+		switch(block.getType()) {
+			case AIR -> {
+				return true;
+			}
+			case CAVE_AIR -> {
+				return true;
+			}
+			case VOID_AIR -> {
+				return true;
+			}
+			case TORCH -> {
+				return true;
+			}
+			case SOUL_TORCH -> {
+				return true;
+			}
+			case WATER -> {
+				return true;
+			}
+			default -> {
+				return false;
+			}
+		}
+	}
 }

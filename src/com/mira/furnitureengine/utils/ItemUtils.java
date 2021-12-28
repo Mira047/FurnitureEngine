@@ -74,11 +74,11 @@ public class ItemUtils {
 		meta.setCustomModelData(main.getConfig().getInt("Furniture." + id + ".custommodeldata"));
 				
 		// Lore (Optional check)
-				
+		
 		if(!main.getConfig().getStringList("Furniture." + id + ".lore").isEmpty()) {
-			List<String> loresList = new ArrayList<String>();
-			for(String text : main.getConfig().getStringList("messages")) {
-				loresList.add(setGradient(translateHexColorCodes("&#","",ChatColor.translateAlternateColorCodes('&', text))));
+			ArrayList<String> loresList = new ArrayList<String>();
+			for(String text : main.getConfig().getStringList("Furniture." + id + ".lore")) {
+				loresList.add(translateHexColorCodes("&#","",ChatColor.translateAlternateColorCodes('&', text)));
 			}
 			meta.setLore(loresList);
 		}

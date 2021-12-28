@@ -128,7 +128,7 @@ public class FurniturePlace implements Listener {
                 if(!Condition.checkForCondition(player, "-OnBlockPlace", key)) event.setCancelled(true);
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    if (blockPlaced.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR || blockPlaced.getLocation().add(0, 1, 0).getBlock().getType() == Material.VOID_AIR || blockPlaced.getLocation().add(0, 1, 0).getBlock().getType() == Material.CAVE_AIR || blockPlaced.getLocation().add(0, 1, 0).getBlock().getType() == Material.TORCH || blockPlaced.getLocation().add(0, 1, 0).getBlock().getType() == Material.SOUL_TORCH) {
+                    if (Utils.checkBlock(blockPlaced.getLocation().add(0, 1, 0).getBlock())) {
                     	// 1x1x1 Placing
                     	if(main.getConfig().getInt("Furniture." + key + ".width")==1&&main.getConfig().getInt("Furniture." + key + ".length")==1&&main.getConfig().getInt("Furniture." + key + ".height")==1) {
                     		blockPlaced.setType(Material.BARRIER);
@@ -180,8 +180,9 @@ public class FurniturePlace implements Listener {
                                 if (i == 15 || i == 16 || i == 0 || i == 1) frame.setRotation(Rotation.FLIPPED);
                             }
                             if(e.isCancelled()) frame.remove();
-                            ListenerUtils.executeCommand("block-place", player, key);
-                    	} else if(main.getConfig().getInt("Furniture." + key + ".height")==0) { // 0x0x0 Placing
+                            ListenerUtils.executeCommand("block-place", player, key, blockPlaced.getLocation());
+                    	} else if(main.getConfig().getInt("Furniture." + key + ".height")==0) { 
+                    		// 0x0x0 Placing
                     		List < Entity > nearbyEntites = (List < Entity > ) blockPlaced.getWorld().getNearbyEntities(blockPlaced.getLocation().add(0, 1, 0), 2 ,2, 2);
                     		for (Entity nearbyEntity: nearbyEntites) {
                                 if (nearbyEntity instanceof ItemFrame) {
@@ -243,7 +244,7 @@ public class FurniturePlace implements Listener {
                                     if (i == 15 || i == 16 || i == 0 || i == 1) frame.setRotation(Rotation.FLIPPED);
                                 }
                                 if(e.isCancelled()) frame.remove();
-                                ListenerUtils.executeCommand("block-place", player, key);
+                                ListenerUtils.executeCommand("block-place", player, key, blockPlaced.getLocation());
                     		}
                     		
                     	}
@@ -255,5 +256,6 @@ public class FurniturePlace implements Listener {
                 return;
             }
         });
+        System.out.println(e.isCancelled());
     }
 }

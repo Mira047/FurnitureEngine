@@ -100,7 +100,7 @@ public class FurnitureAPI {
                     	main.getConfig().getConfigurationSection("Furniture").getKeys(false).forEach(key -> {
                     		if(frame.getLocation().getBlock().getLocation().getY()-1==clicked.getLocation().getY()&&frame.getLocation().getBlock().getLocation().getX()==clicked.getLocation().getX()&&frame.getLocation().getBlock().getLocation().getZ()==clicked.getLocation().getZ()) {
 	            				if(meta.getCustomModelData()==main.getConfig().getInt("Furniture." + key+".custommodeldata")) {
-	            					RightClick.executeAction(player, frame, key);
+	            					RightClick.executeAction(player, frame, key, blockLocation);
 	            				}
                     		}
             				

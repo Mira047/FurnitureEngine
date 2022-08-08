@@ -20,13 +20,11 @@ public class WorldGuard {
     }
 
     public static boolean hasWorldGuard() {
-        if(worldGuardPlugin == null) return false;
-
-        return true;
+        return worldGuardPlugin != null;
     }
 
     public static boolean canBuild(Player player, Location placedLocation) {
-        LocalPlayer localPlayer = worldGuardPlugin.inst().wrapPlayer(player);
+        LocalPlayer localPlayer = worldGuardPlugin.wrapPlayer(player);
 
         RegionContainer container = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionQuery query = container.createQuery();
@@ -35,7 +33,7 @@ public class WorldGuard {
     }
 
     public static boolean canBreak(Player player, Location placedLocation) {
-        LocalPlayer localPlayer = worldGuardPlugin.inst().wrapPlayer(player);
+        LocalPlayer localPlayer = worldGuardPlugin.wrapPlayer(player);
 
         RegionContainer container = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionQuery query = container.createQuery();

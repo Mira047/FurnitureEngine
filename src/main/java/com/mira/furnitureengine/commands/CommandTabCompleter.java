@@ -16,8 +16,7 @@ public class CommandTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args){
-
-        if(args.length == 1) {
+        if (args.length == 1) {
             List<String> autoCompletion = new ArrayList<>();
             autoCompletion.add("reload");
             autoCompletion.add("give");
@@ -26,21 +25,22 @@ public class CommandTabCompleter implements TabCompleter {
 
             return autoCompletion;
         }
-        if(args.length == 2&&args[0].equals("give")) {
+        if (args[0].equals("give")) {
             List<String> autoCompletion = new ArrayList<>();
-
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                autoCompletion.add(p.getName());
+            if (args.length == 2) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    autoCompletion.add(p.getName());
+                }
+            }
+            else if (args.length == 3) {
+                for (String key : main.getConfig().getConfigurationSection("Furniture").getKeys(false)) {
+                    return main.getConfig().getConfigurationSection("Furniture").getKeys(false).stream().toList();
+                }
+            }
+            else if (args.length == 4) {
+                autoCompletion.add(Integer.toString(1));
             }
 
-            return autoCompletion;
-        }
-        if(args.length == 3&&args[0].equals("give")) {
-            return main.getConfig().getConfigurationSection("Furniture").getKeys(false).stream().toList();
-        }
-        if(args.length ==4&&args[0].equals("give")) {
-            List<String> autoCompletion = new ArrayList<>();
-            autoCompletion.add(Integer.toString(1));
             return autoCompletion;
         }
 

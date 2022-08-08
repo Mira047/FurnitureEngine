@@ -33,8 +33,10 @@ public class PlayerInteractListener implements Listener {
         // Interacting with a block
         if(e.getAction() == Action.RIGHT_CLICK_BLOCK&& e.getHand() == EquipmentSlot.HAND && !player.isSneaking()) {
             // For backwards compatibility with graves
+            assert clicked != null;
             Location blockLocation = clicked.getLocation();
             World world = clicked.getWorld();
+
             if(clicked.getType()==Material.BARRIER) {
                 List<Entity> nearbyEntites = (List<Entity>) world.getNearbyEntities(blockLocation.add(0, 1, 0), 0.5, 0.5, 0.5);
                 for (Entity nearbyEntity : nearbyEntites) {

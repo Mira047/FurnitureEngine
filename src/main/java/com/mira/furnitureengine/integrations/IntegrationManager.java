@@ -30,4 +30,11 @@ public class IntegrationManager {
 
         return true;
     }
+
+    public static boolean canInteract(Player player, Location location) {
+        // Admin override
+        if (player.hasPermission("furnitureengine.admin")) return true;
+
+        return true;
+    }
 }

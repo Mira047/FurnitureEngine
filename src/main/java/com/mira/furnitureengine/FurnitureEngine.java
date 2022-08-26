@@ -2,6 +2,7 @@ package com.mira.furnitureengine;
 
 import com.mira.furnitureengine.commands.CommandTabCompleter;
 import com.mira.furnitureengine.commands.MainCommand;
+import com.mira.furnitureengine.integrations.GSit;
 import com.mira.furnitureengine.integrations.WorldGuard;
 import com.mira.furnitureengine.listeners.BlockPlaceListener;
 import com.mira.furnitureengine.listeners.PlayerInteractListener;
@@ -30,6 +31,13 @@ public final class FurnitureEngine extends JavaPlugin {
         Plugin worldGuard = getServer().getPluginManager().getPlugin("WorldGuard");
         WorldGuard.init(worldGuard);
 
+        if(worldGuard!=null) getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Found WorldGuard installed!");
+
+        // GSit integration
+        Plugin gSit = getServer().getPluginManager().getPlugin("GSit");
+        GSit.init(gSit);
+
+        if(gSit!=null) getLogger().info(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Found GSit installed!");
     }
 
     @Override

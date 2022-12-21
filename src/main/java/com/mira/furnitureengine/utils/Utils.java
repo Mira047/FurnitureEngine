@@ -1,11 +1,17 @@
 package com.mira.furnitureengine.utils;
 
-import com.mira.furnitureengine.furnituremanager.Furniture;
+import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Rotation;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class Utils {
-    public static Rotation calculateRotation(Player player, Furniture furniture) {
+    public static Rotation calculateRotation(Player player, FurnitureDefault furniture) {
         float y = player.getLocation().getYaw();
         if (y < 0) y += 360;
         y %= 360;
@@ -13,7 +19,7 @@ public class Utils {
         // rotation identifier. Range 0-16.
         int i = (int) ((y + 8) / 22.5);
 
-        if (furniture.getFullRotate()) {
+        if (furniture.isFullRotateEnabled()) {
             // 8 Side Rotation
             // West
             if (i == 15 || i == 0 || i == 1 || i == 16) return (Rotation.FLIPPED);
@@ -41,5 +47,31 @@ public class Utils {
             else if (i == 15 || i == 16 || i == 0 || i == 1) return (Rotation.FLIPPED);
         }
         return null;
+    }
+
+    public static void executeCommand(String mode, Player player, String key, @Nullable Location loc) {
+        List<String> commands = ConfigHelper.main.getConfig().getStringList("Furniture." + key + ".commands." + mode);
+        if (commands.isEmpty())
+            return;
+        for (String executable : commands) {
+            executable = executable.replace("<player>", player.getName());
+            assert loc != null;
+            executable = executable.replace("<location>", loc.getX() + " " + loc.getY() + " " + loc.getZ());
+            boolean isOp = player.isOp();
+            if (executable.startsWith("[op]")) {
+                player.setOp(true);
+                try {
+                    player.performCommand(executable.substring(4));
+                } finally {
+                    if (!isOp) player.setOp(false);
+                }
+                continue;
+            }
+            if (executable.startsWith("[c]")) {
+                Bukkit.getServer().dispatchCommand((CommandSender)Bukkit.getServer().getConsoleSender(), executable.substring(3));
+                continue;
+            }
+            player.performCommand(executable);
+        }
     }
 }

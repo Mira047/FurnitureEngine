@@ -1,7 +1,7 @@
 package com.mira.furnitureengine.furnituremanager;
 
-import com.mira.furnitureengine.Events.FurnitureBreakEvent;
-import com.mira.furnitureengine.Events.FurniturePlaceEvent;
+import com.mira.furnitureengine.events.FurnitureBreakEvent;
+import com.mira.furnitureengine.events.FurniturePlaceEvent;
 import com.mira.furnitureengine.utils.ConfigHelper;
 import com.mira.furnitureengine.utils.ItemUtils;
 import com.mira.furnitureengine.utils.ReturnType;
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class FurnitureManager {
     // instantiates a new Furniture object by the key.
-    public static Furniture getFurnitureByKey(@NotNull String key) {
-        return new Furniture(
+    public static FurnitureDefault getFurnitureByKey(@NotNull String key) {
+        return new FurnitureDefault(
                 Material.matchMaterial(ConfigHelper.get(key, "material", ReturnType.STRING)) == null ? Material.OAK_PLANKS : Material.matchMaterial(ConfigHelper.get(key, "material", ReturnType.STRING)),
                 key,
                 ConfigHelper.get(key, "display", ReturnType.STRING),
@@ -37,7 +37,7 @@ public class FurnitureManager {
         );
     }
 
-    public static Furniture getFurnitureByItem(@NotNull ItemStack item) {
+    public static FurnitureDefault getFurnitureByItem(@NotNull ItemStack item) {
         for(String key : ConfigHelper.main.getConfig().getConfigurationSection("Furniture").getKeys(false)) {
             Material type = Material.matchMaterial(ConfigHelper.get(key, "material", ReturnType.STRING)) == null ? Material.OAK_PLANKS : Material.matchMaterial(ConfigHelper.get(key, "material", ReturnType.STRING));
             int customModelData = ConfigHelper.get(key, "custommodeldata", ReturnType.INTEGER);
@@ -50,7 +50,7 @@ public class FurnitureManager {
     }
 
     // Places furniture at a location
-    public static void placeFurniture(@NotNull Furniture furniture,@NotNull Location location,@Nullable Rotation rotation, @Nullable Player player) {
+    public static void placeFurniture(@NotNull FurnitureDefault furniture, @NotNull Location location, @Nullable Rotation rotation, @Nullable Player player) {
         Block block = location.getBlock();
 
         FurniturePlaceEvent event = new FurniturePlaceEvent(furniture, player, location);
@@ -74,14 +74,14 @@ public class FurnitureManager {
     }
 
     // Breaks Furniture at a location
-    public static void breakFurniture(@NotNull Furniture furniture, @NotNull Location location, @Nullable Player player) {
+    public static void breakFurniture(@NotNull FurnitureDefault furniture, @NotNull Location location, @Nullable Player player) {
         Block block = location.getBlock();
 
         FurnitureBreakEvent event = new FurnitureBreakEvent(furniture, player, location);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         if(!event.isCancelled()) {
-            furniture.breakFurniture(block);
+            furniture.destroy(block);
 
             location.getWorld().playSound(location, Sound.BLOCK_WOOD_BREAK, 3, 1);
 

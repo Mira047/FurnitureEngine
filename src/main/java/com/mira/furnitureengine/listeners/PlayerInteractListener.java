@@ -1,27 +1,26 @@
 package com.mira.furnitureengine.listeners;
 
-import com.mira.furnitureengine.Events.FurnitureInteractEvent;
-import com.mira.furnitureengine.furnituremanager.Furniture;
+import com.mira.furnitureengine.events.FurnitureInteractEvent;
+import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
 import com.mira.furnitureengine.furnituremanager.FurnitureManager;
 import com.mira.furnitureengine.integrations.GSit;
 import com.mira.furnitureengine.integrations.IntegrationManager;
 import com.mira.furnitureengine.utils.ConfigHelper;
 import com.mira.furnitureengine.utils.ReturnType;
+import com.mira.furnitureengine.utils.Utils;
 import dev.geco.gsit.api.GSitAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -55,23 +54,26 @@ public class PlayerInteractListener implements Listener {
                                 if(type==null) type = Material.OAK_PLANKS;
                                 if(!frame.getItem().getType().equals(type)) continue;
 
-                                Furniture furniture = FurnitureManager.getFurnitureByKey(key);
+                                FurnitureDefault furniture = FurnitureManager.getFurnitureByKey(key);
 
-                                // System.out.println("[FurnitureEngine] Furniture check successful: " + key);
+                                FurnitureInteractEvent event = new FurnitureInteractEvent(player, clicked.getLocation());
+                                Bukkit.getServer().getPluginManager().callEvent((Event)event);
 
-                                // Now that we have the furniture, execute right click actions.
-
-                                // Managing chairs: GSit
-                                if(ConfigHelper.main.getConfig().getBoolean("Furniture." + key + ".chair.enabled")) {
-                                    // System.out.println("[FurnitureEngine] Chairs are enabled " + key);
-                                    if(GSit.hasGSit()) {
-                                        // check if theres a player already
-                                        // System.out.println("[FurnitureEngine] GSit is installed and working!");
-                                        if(GSitAPI.getSeats(clicked).size()==0) {
-                                            GSitAPI.createSeat(clicked, player, true, 0, ConfigHelper.main.getConfig().getDouble("Furniture." + key + ".chair.yoffset"), 0, 0, true);
-                                            // System.out.println("[FurnitureEngine] The player should be sitting now. If not, it's an issue from GSit.");
+                                if(!event.isCancelled()) {
+                                    // Managing interactions: GSit
+                                    if (ConfigHelper.main.getConfig().getBoolean("Furniture." + key + ".chair.enabled")) {
+                                        // System.out.println("[FurnitureEngine] Chairs are enabled " + key);
+                                        if (GSit.hasGSit()) {
+                                            // check if theres a player already
+                                            if (GSitAPI.getSeats(clicked).size() == 0) {
+                                                GSitAPI.createSeat(clicked, player, true, 0, ConfigHelper.main.getConfig().getDouble("Furniture." + key + ".chair.yoffset"), 0, 0, true);
+                                            }
                                         }
                                     }
+
+                                    // Managing interactions: executing commands
+                                    if(player.isSneaking()) Utils.executeCommand("shift-right-click", player, key, clicked.getLocation());
+                                    else Utils.executeCommand("right-click", player, key, clicked.getLocation());
                                 }
 
                                 return;
@@ -108,7 +110,7 @@ public class PlayerInteractListener implements Listener {
                                     continue;
                                 }
 
-                                Furniture furniture = FurnitureManager.getFurnitureByKey(key);
+                                FurnitureDefault furniture = FurnitureManager.getFurnitureByKey(key);
                                 FurnitureManager.breakFurniture(furniture, clicked.getLocation(), player);
 
                                 return;

@@ -1,6 +1,6 @@
 package com.mira.furnitureengine.listeners;
 
-import com.mira.furnitureengine.furnituremanager.Furniture;
+import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
 import com.mira.furnitureengine.furnituremanager.FurnitureManager;
 import com.mira.furnitureengine.integrations.IntegrationManager;
 import com.mira.furnitureengine.utils.ConfigHelper;
@@ -69,7 +69,7 @@ public class BlockPlaceListener implements Listener {
             // if the item custom model data is the same as the one in the config, place the block.
             if(meta.getCustomModelData() == customModelData) {
                 // System.out.println("Generating furniture...");
-                Furniture furniture = FurnitureManager.getFurnitureByKey(key);
+                FurnitureDefault furniture = FurnitureManager.getFurnitureByKey(key);
 
                 // Throw an exception if the furniture is null.
                 if(furniture == null) {

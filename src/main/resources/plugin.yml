@@ -3,7 +3,7 @@ version: '${project.version}'
 main: com.mira.furnitureengine.FurnitureEngine
 api-version: 1.16
 load: STARTUP
-softdepend: [ GSit, WorldGuard ]
+softdepend: [ GSit, Sittable, WorldGuard ]
 author: Gabby
 description: Allows you to make custom usable furniture.
 website: www.nightrealm.ga

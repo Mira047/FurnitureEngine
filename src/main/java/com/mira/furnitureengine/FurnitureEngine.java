@@ -32,6 +32,8 @@ public final class FurnitureEngine extends JavaPlugin {
             });
         }
 
+        new Metrics(this, 13146);
+
         loadConfig();
 
         // Plugin startup logic

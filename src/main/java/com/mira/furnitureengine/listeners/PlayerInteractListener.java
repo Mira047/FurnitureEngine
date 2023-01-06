@@ -8,6 +8,7 @@ import com.mira.furnitureengine.integrations.IntegrationManager;
 import com.mira.furnitureengine.utils.ConfigHelper;
 import com.mira.furnitureengine.utils.ReturnType;
 import com.mira.furnitureengine.utils.Utils;
+import com.ranull.sittable.Sittable;
 import dev.geco.gsit.api.GSitAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -67,6 +68,11 @@ public class PlayerInteractListener implements Listener {
                                             // check if theres a player already
                                             if (GSitAPI.getSeats(clicked).size() == 0) {
                                                 GSitAPI.createSeat(clicked, player, true, 0, ConfigHelper.main.getConfig().getDouble("Furniture." + key + ".chair.yoffset"), 0, 0, true);
+                                            }
+                                        } else if (Bukkit.getServer().getPluginManager().getPlugin("Sittable") != null) {
+                                            // check if theres a player already
+                                            if (!Sittable.isBlockOccupied(clicked)) {
+                                                Sittable.sitOnBlock(player, clicked, 0.0, ConfigHelper.main.getConfig().getDouble("Furniture." + key + ".chair.yoffset"), 0.0, player.getFacing().getOppositeFace());
                                             }
                                         }
                                     }

@@ -3,6 +3,7 @@ package com.mira.furnitureengine.utils;
 import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Rotation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +12,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class Utils {
+
+    public static final int FURNITURE_FORMAT_VERSION = 2;
+
+
     public static Rotation calculateRotation(Player player, FurnitureDefault furniture) {
         float y = player.getLocation().getYaw();
         if (y < 0) y += 360;

@@ -49,6 +49,8 @@ public final class FurnitureEngine extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
 
+        getServer().getPluginManager().registerEvents(new com.mira.furnitureengine.legacy.ChunkLoadListener(), this);
+
         loadIntegrations();
 
     }

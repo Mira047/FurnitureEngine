@@ -104,7 +104,7 @@ public class FurnitureManager {
 
         if(!event.isCancelled()) {
             if(block.getType()==Material.BARRIER) {
-                List<Entity> nearbyEntites = (List<Entity>) block.getWorld().getNearbyEntities(block.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+                List<Entity> nearbyEntites = (List<Entity>) block.getWorld().getNearbyEntities(block.getLocation(), 0.13, 0.2, 0.13);
                 for (Entity nearbyEntity : nearbyEntites) {
                     if (nearbyEntity instanceof ItemFrame) {
                         ItemFrame frame = (ItemFrame) nearbyEntity;

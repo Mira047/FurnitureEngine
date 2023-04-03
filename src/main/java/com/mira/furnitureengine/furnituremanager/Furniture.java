@@ -109,7 +109,7 @@ public class Furniture {
 
                 // Places item frame (entity) on top of the block
                 World world = block.getWorld();
-                ItemFrame frame = world.spawn(block.getLocation().add(0,1,0), ItemFrame.class);
+                ItemFrame frame = world.spawn(block.getLocation(), ItemFrame.class);
 
                 frame.setInvulnerable(true);
                 frame.setFixed(true);
@@ -137,13 +137,13 @@ public class Furniture {
         if(height==1){
             // Normal Furniture
 
-            List<Entity> nearbyEntites = (List <Entity>) block.getWorld().getNearbyEntities(block.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+            List<Entity> nearbyEntites = (List <Entity>) block.getWorld().getNearbyEntities(block.getLocation(), 0.13, 0.2, 0.13);
 
             for(Entity entity : nearbyEntites){
                 if(entity instanceof ItemFrame){
                     ItemFrame frame = (ItemFrame) entity;
 
-                    if (frame.getLocation().getBlock().getLocation().add(0,-1,0).equals(block.getLocation())) {
+                    if (frame.getLocation().getBlock().getLocation().equals(block.getLocation())) {
                         frame.remove();
 
                         block.breakNaturally();

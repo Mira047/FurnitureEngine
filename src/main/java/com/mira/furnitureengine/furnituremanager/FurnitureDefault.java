@@ -1,12 +1,15 @@
 package com.mira.furnitureengine.furnituremanager;
 
+import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.furnituremanager.furnituretypes.Furniture;
 import com.mira.furnitureengine.utils.ItemUtils;
+import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +126,8 @@ public class FurnitureDefault implements Furniture {
 
                 // Places item frame (entity) on top of the block
                 World world = block.getWorld();
-                ItemFrame frame = world.spawn(block.getLocation().add(0,1,0), ItemFrame.class);
+                ItemFrame frame = world.spawn(block.getLocation(), ItemFrame.class);
+
 
                 frame.setInvulnerable(true);
                 frame.setFixed(true);
@@ -134,6 +138,8 @@ public class FurnitureDefault implements Furniture {
 
                 // Sets item frame to the correct item
                 frame.setItem(ItemUtils.setFrameItem(itemType, blockCustomModelData));
+
+                frame.setMetadata("furniture-format", new FixedMetadataValue(FurnitureEngine.getPlugin(FurnitureEngine.class), Utils.FURNITURE_FORMAT_VERSION));
             }
         } else if(height==0){
             // Props
@@ -150,11 +156,11 @@ public class FurnitureDefault implements Furniture {
         if(height==1){
             // Normal Furniture
 
-            List<Entity> nearbyEntites = (List <Entity>) block.getWorld().getNearbyEntities(block.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+            List<Entity> nearbyEntites = (List <Entity>) block.getWorld().getNearbyEntities(block.getLocation(), 0.13, 0.2, 0.13);
 
             for(Entity entity : nearbyEntites){
                 if(entity instanceof ItemFrame frame){
-                    if (frame.getLocation().getBlock().getLocation().add(0,-1,0).equals(block.getLocation())) {
+                    if (frame.getLocation().getBlock().getLocation().equals(block.getLocation())) {
                         frame.remove();
 
                         block.breakNaturally();

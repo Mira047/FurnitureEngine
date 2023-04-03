@@ -37,7 +37,7 @@ public class BlockPlaceListener implements Listener {
 
         Location location = blockPlaced.getLocation();
 
-        if(!meta.hasCustomModelData()) return;
+        if(meta == null || !meta.hasCustomModelData()) return;
 
         // System.out.println("The item has custom model data. Everything is fine so far.");
 

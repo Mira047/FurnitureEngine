@@ -38,14 +38,14 @@ public class PlayerInteractListener implements Listener {
 
             if(!clicked.getType().equals(Material.BARRIER)) return;
 
-            List<Entity> nearbyEntites = (List <Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+            List<Entity> nearbyEntites = (List <Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation(), 0.13, 0.2, 0.13);
 
             for(Entity entity : nearbyEntites) {
                 if (entity instanceof ItemFrame frame) {
                     // First check if the frame item has custom model data, otherwise continue.
                     if (!frame.getItem().getItemMeta().hasCustomModelData()) continue;
 
-                    if (frame.getLocation().getBlock().getLocation().add(0,-1,0).equals(clicked.getLocation())) {
+                    if (frame.getLocation().getBlock().getLocation().equals(clicked.getLocation())) {
                         for(String key : ConfigHelper.main.getConfig().getConfigurationSection("Furniture").getKeys(false)) {
                             // Check if the config and item custom model data match
                             if(ConfigHelper.main.getConfig().getInt("Furniture." + key + ".custommodeldata")==frame.getItem().getItemMeta().getCustomModelData()){
@@ -96,14 +96,14 @@ public class PlayerInteractListener implements Listener {
 
             if(!clicked.getType().equals(Material.BARRIER)) return;
 
-            List<Entity> nearbyEntites = (List <Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation().add(0, 1, 0), 0.13, 0.2, 0.13);
+            List<Entity> nearbyEntites = (List <Entity>) clicked.getWorld().getNearbyEntities(clicked.getLocation(), 0.13, 0.2, 0.13);
 
             for(Entity entity : nearbyEntites){
                 if(entity instanceof ItemFrame frame){
                     // First check if the frame item has custom model data, otherwise continue.
                     if(!frame.getItem().getItemMeta().hasCustomModelData()) continue;
 
-                    if (frame.getLocation().getBlock().getLocation().add(0,-1,0).equals(clicked.getLocation())) {
+                    if (frame.getLocation().getBlock().getLocation().equals(clicked.getLocation())) {
                         for(String key : ConfigHelper.main.getConfig().getConfigurationSection("Furniture").getKeys(false)) {
                             // Check if the config and item custom model data match
                             if(ConfigHelper.main.getConfig().getInt("Furniture." + key + ".custommodeldata")==frame.getItem().getItemMeta().getCustomModelData()){

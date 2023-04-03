@@ -1,4 +1,4 @@
-package com.mira.furnitureengine.Events;
+package com.mira.furnitureengine.events;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

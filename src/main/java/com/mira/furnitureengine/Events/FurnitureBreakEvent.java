@@ -1,6 +1,6 @@
-package com.mira.furnitureengine.Events;
+package com.mira.furnitureengine.events;
 
-import com.mira.furnitureengine.furnituremanager.Furniture;
+import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -12,13 +12,13 @@ public class FurnitureBreakEvent extends Event {
     private boolean cancelled;
     private boolean isDroppingItems;
 
-    private Furniture furniture;
+    private FurnitureDefault furniture;
 
     private Player interactingPlayer;
 
     private Location furnitureLocation;
 
-    public FurnitureBreakEvent(Furniture furniture, Player interactingPlayer, Location furnitureLocation) {
+    public FurnitureBreakEvent(FurnitureDefault furniture, Player interactingPlayer, Location furnitureLocation) {
         this.furniture = furniture;
         this.interactingPlayer = interactingPlayer;
         this.furnitureLocation = furnitureLocation;
@@ -34,7 +34,7 @@ public class FurnitureBreakEvent extends Event {
         return furnitureLocation;
     }
 
-    public Furniture getFurniture() {
+    public FurnitureDefault getFurniture() {
         return furniture;
     }
 

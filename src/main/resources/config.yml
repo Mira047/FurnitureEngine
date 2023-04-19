@@ -1,9 +1,36 @@
-# Make sure to check out the wiki and given resource pack / config for help!
 Furniture:
-
-
+  woodworks_table:
+    display: "&fWoodworks Table"
+    item: PAPER
+    model_data: 1
+    rotation: 4
+    submodels:
+      - offset:
+          x: 1
+          y: 0
+          z: 0
+        model_data: 2
+    functions:
+      right-click:
+        commands:
+          - type: COMMAND
+            command: "[OPEN_MENU] woodworks_table"
+    breaking:
+      drop: SELF
+      speed: 1
+  stone_chair:
+    display: "&fStone Chair"
+    item: PAPER
+    model_data: 3
+    rotation: 8
+    functions:
+      right-click:
+        - type: CHAIR
+          y-offset: 0.5
+    placing:
+      override: true
+      item: STONE
+      model_data: 1
 
 Options:
-  check-for-updates: true
-  check-place-permissions: true
-  check-break-permissions: true
+  checkForUpdates: true

@@ -1,9 +1,12 @@
 package com.mira.furnitureengine.events;
 
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.Action;
+import org.jetbrains.annotations.NotNull;
 
 public class FurnitureInteractEvent extends Event {
 
@@ -11,12 +14,15 @@ public class FurnitureInteractEvent extends Event {
     private boolean cancelled;
 
     private final Player interactingPlayer;
-
     private final Location furnitureLocation;
+    private final BlockFace blockFace;
+    private final Action action;
 
-    public FurnitureInteractEvent(Player interactingPlayer, Location furnitureLocation) {
+    public FurnitureInteractEvent(Player interactingPlayer, Action action, Location furnitureLocation, BlockFace blockFace) {
         this.interactingPlayer = interactingPlayer;
         this.furnitureLocation = furnitureLocation;
+        this.blockFace = blockFace;
+        this.action = action;
     }
 
     public Player getPlayer() {
@@ -27,6 +33,14 @@ public class FurnitureInteractEvent extends Event {
         return furnitureLocation;
     }
 
+    public BlockFace getBlockFace() {
+        return blockFace;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
     public boolean isCancelled() {
         return cancelled;
     }
@@ -35,12 +49,7 @@ public class FurnitureInteractEvent extends Event {
         cancelled = cancel;
     }
 
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
 }

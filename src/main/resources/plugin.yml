@@ -3,27 +3,29 @@ version: '${project.version}'
 main: com.mira.furnitureengine.FurnitureEngine
 api-version: 1.16
 load: STARTUP
-softdepend: [ GSit, Sittable, WorldGuard ]
-author: Gabby
-description: Allows you to make custom usable furniture.
-website: www.nightrealm.ga
+authors: [Gabby]
+description: Allows you to make custom usable furniture
+prefix: "FE"
 
 commands:
   furnitureengine:
-    description: Main Plugin command.
-    aliases: [fe]
+    description: The core command to the plugin
+    aliases: [fe, feg]
     permission: furnitureengine.admin
 
 permissions:
+  furnitureengine.admin:
+      default: op
   furnitureengine.blockbreak:
     default: true
   furnitureengine.blockplace:
     default: true
-  furnitureengine.admin:
-    default: op
+  furnitureengine.use:
+    default: true
   furnitureengine.*:
     default: op
     children:
-      furnitureengine.admin: true
-      furnitureengine.blockbreak: true
-      furnitureengine.blockplace: true
+        furnitureengine.admin: true
+        furnitureengine.blockbreak: true
+        furnitureengine.blockplace: true
+        furnitureengine.use: true

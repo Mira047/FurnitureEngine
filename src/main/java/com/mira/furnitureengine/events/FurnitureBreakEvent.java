@@ -1,10 +1,11 @@
 package com.mira.furnitureengine.events;
 
-import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
+import com.mira.furnitureengine.furniture.core.Furniture;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class FurnitureBreakEvent extends Event {
 
@@ -12,13 +13,13 @@ public class FurnitureBreakEvent extends Event {
     private boolean cancelled;
     private boolean isDroppingItems;
 
-    private FurnitureDefault furniture;
+    private final Furniture furniture;
 
-    private Player interactingPlayer;
+    private final Player interactingPlayer;
 
-    private Location furnitureLocation;
+    private final Location furnitureLocation;
 
-    public FurnitureBreakEvent(FurnitureDefault furniture, Player interactingPlayer, Location furnitureLocation) {
+    public FurnitureBreakEvent(Furniture furniture, Player interactingPlayer, Location furnitureLocation) {
         this.furniture = furniture;
         this.interactingPlayer = interactingPlayer;
         this.furnitureLocation = furnitureLocation;
@@ -34,7 +35,7 @@ public class FurnitureBreakEvent extends Event {
         return furnitureLocation;
     }
 
-    public FurnitureDefault getFurniture() {
+    public Furniture getFurniture() {
         return furniture;
     }
 
@@ -46,11 +47,7 @@ public class FurnitureBreakEvent extends Event {
         cancelled = cancel;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
@@ -59,7 +56,7 @@ public class FurnitureBreakEvent extends Event {
     }
 
     public void setDroppingItems(boolean isDroppingItems) {
-        isDroppingItems = isDroppingItems;
+        this.isDroppingItems = isDroppingItems;
     }
 
 }

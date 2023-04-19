@@ -1,82 +1,209 @@
 package com.mira.furnitureengine.utils;
 
-import com.mira.furnitureengine.furnituremanager.FurnitureDefault;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Rotation;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import com.mira.furnitureengine.furniture.core.Furniture;
+import org.bukkit.Location;
+import org.bukkit.Rotation;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 public class Utils {
+    private final static int FURNITURE_FORMAT_VERSION = 3;
 
-    public static final int FURNITURE_FORMAT_VERSION = 2;
+    public static int getFurnitureFormatVersion() {
+        return FURNITURE_FORMAT_VERSION;
+    }
 
+    public static boolean itemsMatch(ItemStack item1, ItemStack item2) {
+        if(item1 == null || item2 == null) return false;
 
-    public static Rotation calculateRotation(Player player, FurnitureDefault furniture) {
-        float y = player.getLocation().getYaw();
+        if(item1.getType() != item2.getType()) return false;
+
+        if(item1.hasItemMeta() && item2.hasItemMeta()) {
+            if(item1.getItemMeta().hasDisplayName() && item2.getItemMeta().hasDisplayName()) {
+                if(!item1.getItemMeta().getDisplayName().equals(item2.getItemMeta().getDisplayName())) return false;
+            }
+            if(item1.getItemMeta().hasLore() && item2.getItemMeta().hasLore()) {
+                if(!item1.getItemMeta().getLore().equals(item2.getItemMeta().getLore())) return false;
+            }
+
+            if(item1.getItemMeta().hasCustomModelData() && item2.getItemMeta().hasCustomModelData()) {
+                if(item1.getItemMeta().getCustomModelData() != item2.getItemMeta().getCustomModelData()) return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static Location calculatePlacingLocation(Block clickedBlock, BlockFace clickedFace) {
+        Location location = clickedBlock.getLocation();
+
+        if(!Utils.isSolid(clickedBlock)) return location;
+
+        switch (clickedFace) {
+            case UP -> {
+                location.add(0, 1, 0);
+            }
+            case DOWN -> {
+                location.add(0, -1, 0);
+            }
+            case NORTH -> {
+                location.add(0, 0, -1);
+            }
+            case SOUTH -> {
+                location.add(0, 0, 1);
+            }
+            case WEST -> {
+                location.add(-1, 0, 0);
+            }
+            case EAST -> {
+                location.add(1, 0, 0);
+            }
+        }
+
+        return location;
+    }
+
+    public static Location getRelativeLocation(Location input, Vector offset, Rotation rotation) {
+        switch(rotation) {
+            case NONE -> {
+                return input.clone().add(offset);
+            }
+            case CLOCKWISE -> {
+                return input.clone().add(-offset.getZ(), offset.getY(), offset.getX());
+            }
+            case FLIPPED -> {
+                return input.clone().add(-offset.getX(), offset.getY(), -offset.getZ());
+            }
+            case COUNTER_CLOCKWISE -> {
+                return input.clone().add(offset.getZ(), offset.getY(), -offset.getX());
+            }
+            default -> {
+                return input.clone();
+            }
+        }
+    }
+
+    public static Rotation getRotation(Entity entity, Furniture.RotSides rotSides) {
+        float y = entity.getLocation().getYaw();
         if (y < 0) y += 360;
         y %= 360;
 
-        // rotation identifier. Range 0-16.
         int i = (int) ((y + 8) / 22.5);
 
-        if (furniture.isFullRotateEnabled()) {
-            // 8 Side Rotation
-            // West
-            if (i == 15 || i == 0 || i == 1 || i == 16) return (Rotation.FLIPPED);
-            // North-West
-            else if (i == 2) return (Rotation.FLIPPED_45);
-            // North
-            else if (i == 3 || i == 4 || i == 5) return (Rotation.COUNTER_CLOCKWISE);
-            // North-East
-            else if (i == 6) return (Rotation.COUNTER_CLOCKWISE_45);
-            // South-East
-            else if (i == 10) return (Rotation.CLOCKWISE_45);
-            // South
-            else if (i == 11 || i == 12 || i == 13) return (Rotation.CLOCKWISE);
-            // South-West
-            else if (i == 14) return (Rotation.CLOCKWISE_135);
-            // East
-            else if (i == 7 || i == 8 || i == 9) return (Rotation.NONE);
-
-
+        if(rotSides == Furniture.RotSides.FOUR_SIDED) {
+            switch (i) {
+                case 14, 15, 16, 0, 1 -> {
+                    return Rotation.FLIPPED;
+                }
+                case 2, 3, 4,5 -> {
+                    return Rotation.COUNTER_CLOCKWISE;
+                }
+                case 6, 7, 8, 9 -> {
+                    return Rotation.NONE;
+                }
+                case 10, 11, 12, 13 -> {
+                    return Rotation.CLOCKWISE;
+                }
+            }
+        } else if(rotSides == Furniture.RotSides.EIGHT_SIDED) {
+            switch(i) {
+                case 15,16,0,1 -> {
+                    return Rotation.FLIPPED;
+                }
+                case 2 -> {
+                    return Rotation.FLIPPED_45;
+                }
+                case 3,4,5 -> {
+                    return Rotation.COUNTER_CLOCKWISE;
+                }
+                case 6 -> {
+                    return Rotation.COUNTER_CLOCKWISE_45;
+                }
+                case 7,8,9 -> {
+                    return Rotation.NONE;
+                }
+                case 10 -> {
+                    return Rotation.CLOCKWISE_45;
+                }
+                case 11,12,13 -> {
+                    return Rotation.CLOCKWISE;
+                }
+                case 14 -> {
+                    return Rotation.CLOCKWISE_135;
+                }
+            }
         } else {
-            // 4 Side Rotation
-            if (i == 6 || i == 7 || i == 8 || i == 9) return (Rotation.NONE);
-            else if (i == 10 || i == 11 || i == 12 || i == 13 || i == 14) return (Rotation.CLOCKWISE);
-            else if (i == 2 || i == 3 || i == 4 || i == 5) return (Rotation.COUNTER_CLOCKWISE);
-            else if (i == 15 || i == 16 || i == 0 || i == 1) return (Rotation.FLIPPED);
+            return Rotation.NONE;
         }
-        return null;
+
+        return Rotation.NONE;
     }
 
-    public static void executeCommand(String mode, Player player, String key, @Nullable Location loc) {
-        List<String> commands = ConfigHelper.main.getConfig().getStringList("Furniture." + key + ".commands." + mode);
-        if (commands.isEmpty())
-            return;
-        for (String executable : commands) {
-            executable = executable.replace("<player>", player.getName());
-            assert loc != null;
-            executable = executable.replace("<location>", loc.getX() + " " + loc.getY() + " " + loc.getZ());
-            boolean isOp = player.isOp();
-            if (executable.startsWith("[op]")) {
-                player.setOp(true);
-                try {
-                    player.performCommand(executable.substring(4));
-                } finally {
-                    if (!isOp) player.setOp(false);
+    public static boolean entityObstructing(Location location) {
+        // Check if there is an entity obstructing the location (but item frames get ignored)
+        for(Entity entity : location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5)) {
+            if(entity.getType().isAlive() && entity.getType() != EntityType.ITEM_FRAME) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+        Apparently the Material.isSolid() method is not exactly what I need... For example flowers are considered non-solid,
+        but you shouldn't be able to place furniture on them. So I made my own method.
+     */
+    public static boolean isSolid(Block block) {
+        if(block.getType().isSolid()) return true;
+
+        else {
+            if(block.getType().getBlastResistance() > 0.2) return true;
+
+            if(block.getType().name().contains("SAPLING")) return true;
+
+            if(block.getType().name().contains("FLOWER") || block.getType().name().contains("TULIP")) return true;
+
+            if(block.getType().name().contains("CARPET")) return true;
+
+            if(block.getType().name().contains("MUSHROOM") || block.getType().name().contains("FUNGUS")) return true;
+
+            if(block.getType().name().contains("BANNER")) return true;
+
+            switch (block.getType()) {
+                case TORCH, SOUL_TORCH, LANTERN, SOUL_LANTERN, REDSTONE_WIRE, REDSTONE, REDSTONE_TORCH, REDSTONE_WALL_TORCH, NETHER_PORTAL, END_PORTAL, BEETROOTS, CARROTS, POTATOES, WHEAT, SWEET_BERRY_BUSH, SCAFFOLDING, PUMPKIN_STEM, MELON_STEM, NETHER_WART, FLOWER_POT, END_ROD, KELP, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, COBWEB -> {
+                    return true;
                 }
-                continue;
             }
-            if (executable.startsWith("[c]")) {
-                Bukkit.getServer().dispatchCommand((CommandSender)Bukkit.getServer().getConsoleSender(), executable.substring(3));
-                continue;
-            }
-            player.performCommand(executable);
+
+            return false;
+        }
+    }
+
+    /**
+     * It's the same case as the isSolid() method, but for interactable blocks.
+     * Because for SOME REASON STAIRS ARE INTERACTABLE??? WHAT THE HELL MOJANG
+     * @param block The block to check
+     * @return Whether the block is interactable or not
+     */
+    public static boolean isInteractable(Block block) {
+        if(!block.getType().isInteractable()) return false;
+
+        else {
+            if(block.getType().name().contains("STAIRS")) return false;
+
+            if(block.getType().name().contains("TNT")) return false;
+
+            if(block.getType().name().contains("FENCE")) return false;
+
+            if(block.getType().name().contains("IRON")) return false; // iron door, iron trapdoor
+
+            return true;
         }
     }
 }

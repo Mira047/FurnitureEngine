@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class CoreCommand implements CommandExecutor {
-    FurnitureEngine plugin = FurnitureEngine.instance;
+    FurnitureEngine plugin = FurnitureEngine.getInstance();
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if(args.length==0) {

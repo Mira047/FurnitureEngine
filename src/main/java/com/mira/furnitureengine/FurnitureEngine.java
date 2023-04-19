@@ -3,6 +3,7 @@ package com.mira.furnitureengine;
 import com.mira.furnitureengine.commands.CoreCommand;
 import com.mira.furnitureengine.commands.CoreCommandTabCompleter;
 import com.mira.furnitureengine.furniture.FurnitureManager;
+import com.mira.furnitureengine.furniture.functions.FunctionManager;
 import com.mira.furnitureengine.listeners.PlayerInteractListener;
 import com.mira.furnitureengine.utils.UpdateChecker;
 import org.bukkit.event.EventHandler;
@@ -11,7 +12,11 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FurnitureEngine extends JavaPlugin {
-    public static FurnitureEngine instance;
+    public static FurnitureEngine getInstance() {
+        return instance;
+    }
+
+    private static FurnitureEngine instance;
 
     @Override
     public void onEnable() {
@@ -22,6 +27,10 @@ public final class FurnitureEngine extends JavaPlugin {
         // Load config
         loadConfig();
 
+        // Static access... doing this so that it instantiates the classes
+        FurnitureManager.getInstance();
+        FunctionManager.getInstance();
+
         if(this.getConfig().getBoolean("Options.checkForUpdates")) {
             new UpdateChecker(97134).getVersion(version -> {
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -31,8 +40,6 @@ public final class FurnitureEngine extends JavaPlugin {
                 }
             });
         }
-
-        FurnitureManager furnitureManager = new FurnitureManager();
 
         // Register commands
         getCommand("furnitureengine").setExecutor(new CoreCommand());

@@ -2,6 +2,9 @@ package com.mira.furnitureengine.furniture.core;
 
 import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.events.FurniturePlaceEvent;
+import com.mira.furnitureengine.furniture.FurnitureManager;
+import com.mira.furnitureengine.furniture.functions.FunctionManager;
+import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -16,13 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.mira.furnitureengine.utils.FormatUtils.format;
 
 public class Furniture {
-    public static FurnitureEngine plugin = FurnitureEngine.instance;
+    public static FurnitureEngine plugin = FurnitureEngine.getInstance();
 
     public enum RotSides {
         FOUR_SIDED, EIGHT_SIDED ;
@@ -51,6 +55,10 @@ public class Furniture {
 
     /* Advanced Furniture Data */
     private final List<SubModel> subModels = new ArrayList<>();
+
+    private final HashMap<FunctionType, List<HashMap<String, Object>>> functions = new HashMap<>();
+    // I am aware that the thing above looks awful, but if you take a look at the code below, you'll see why I did it this way
+
 
     public Furniture(String id) throws IllegalArgumentException {
         this.id = id;
@@ -115,6 +123,46 @@ public class Furniture {
             throw new IllegalArgumentException("Failed to load submodels for furniture " + id + ". Error: " + e.getMessage());
         }
 
+        // And now get all functions
+        try {
+            for (FunctionType type : FunctionType.values()) {
+                for(Object obj : plugin.getConfig().getList("Furniture." + id + ".functions." + type.name().toUpperCase(), new ArrayList<>())) {
+                    if(obj instanceof Map<?, ?> map) {
+                        // it contains a type ("type") and multiple arguments, which are stored in a map ("args")
+                        String functionType = map.get("type") instanceof String string ? string : null;
+
+                        if(functionType == null) {
+                            throw new IllegalArgumentException("Function type for furniture " + id + " is null. This is not allowed.");
+                        }
+
+                        HashMap<String, Object> args = new HashMap<>();
+
+                        args.put("type", functionType); // Why not put it in the for below? well for error handling, of course
+
+                        for(Map.Entry<?, ?> entry : map.entrySet()) {
+                            if(entry.getKey().equals("type")) continue;
+
+                            args.put(entry.getKey().toString(), entry.getValue());
+                        }
+
+                        if(!functions.containsKey(type)) {
+                            ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+
+                            list.add(args);
+
+                            functions.put(type, list);
+                        } else {
+                            functions.get(type).add(args);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to load functions for furniture " + id + ". Error: " + e.getMessage());
+
+            throw new IllegalArgumentException("Failed to load functions for furniture " + id + ". Error: " + e.getMessage());
+        }
+
         init();
     }
 
@@ -154,6 +202,10 @@ public class Furniture {
         return generatedItem;
     }
 
+    public ItemStack getBlockItem() {
+        return generatedFrameItem;
+    }
+
     private void init() throws IllegalArgumentException {
         // Generate itemstack
         generatedItem = new ItemStack(material);
@@ -177,8 +229,109 @@ public class Furniture {
 
 
 
-        // For testing purposes set the frame item to the same as the generated item
-        generatedFrameItem = generatedItem;
+        // Load overrides (drop-item, block-item)
+        if(plugin.getConfig().contains("Furniture." + id + ".overrides")) {
+            // Drop item
+            if(plugin.getConfig().contains("Furniture." + id + ".overrides.drop-item")) {
+                // Get fields (item, amount, model_data, display, lore)
+                Material dropItem = Material.getMaterial(plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.item", material.name()));
+                int dropAmount = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.amount", 1);
+                int dropModelData = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.model_data", modelData);
+                String dropDisplayName = plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.display", displayName);
+                List<String> dropLore = plugin.getConfig().getStringList("Furniture." + id + ".overrides.drop-item.lore");
+
+                if(dropItem == null) {
+                    throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". Material is null.");
+                }
+
+                // Generate item
+                ItemStack drop = new ItemStack(dropItem);
+                drop.setAmount(dropAmount);
+
+                ItemMeta dropMeta = drop.getItemMeta();
+
+                if(dropMeta == null) {
+                    throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". ItemMeta is null. (Material: " + dropItem + ")");
+                }
+
+                if(dropDisplayName != null) {
+                    dropMeta.setDisplayName(dropDisplayName);
+                }
+
+                if(!dropLore.isEmpty()) {
+                    dropMeta.setLore(dropLore);
+                }
+
+                if(dropModelData != 0) {
+                    dropMeta.setCustomModelData(dropModelData);
+                }
+
+                drop.setItemMeta(dropMeta);
+
+                // Now set it
+                generatedDropItem = drop;
+            }
+            if(plugin.getConfig().contains("Furniture." + id + ".overrides.block-item")) {
+                // Get fields (item, model_data, display, lore)
+                Material blockItem = Material.getMaterial(plugin.getConfig().getString("Furniture." + id + ".overrides.block-item.item", material.name()));
+                int blockModelData = plugin.getConfig().getInt("Furniture." + id + ".overrides.block-item.model_data", modelData);
+                String blockDisplayName = plugin.getConfig().getString("Furniture." + id + ".overrides.block-item.display", displayName);
+                List<String> blockLore = plugin.getConfig().getStringList("Furniture." + id + ".overrides.block-item.lore");
+
+                if(blockItem == null) {
+                    throw new IllegalArgumentException("Failed to generate block item for furniture " + id + ". Material is null.");
+                }
+
+                // Generate item
+                ItemStack block = new ItemStack(blockItem);
+                block.setAmount(1);
+
+                ItemMeta blockMeta = block.getItemMeta();
+
+                if(blockMeta == null) {
+                    throw new IllegalArgumentException("Failed to generate block item for furniture " + id + ". ItemMeta is null. (Material: " + blockItem + ")");
+                }
+
+                if(blockDisplayName != null) {
+                    blockMeta.setDisplayName(blockDisplayName);
+                }
+
+                if(!blockLore.isEmpty()) {
+                    blockMeta.setLore(blockLore);
+                }
+
+                if(blockModelData != 0) {
+                    blockMeta.setCustomModelData(blockModelData);
+                }
+
+                block.setItemMeta(blockMeta);
+
+                // Now set it
+                generatedFrameItem = block;
+            }
+        }
+
+        // if there is no drop item, use the generated item (and same for block item)
+        if(generatedDropItem == null) {
+            generatedDropItem = generatedItem;
+        }
+        if(generatedFrameItem == null) {
+            generatedFrameItem = generatedItem;
+        }
+    }
+
+    public ItemStack generateSubModelItem(SubModel subModel) {
+        ItemStack item = generatedFrameItem.clone();
+
+        ItemMeta meta = item.getItemMeta();
+
+        assert meta != null;
+
+        meta.setCustomModelData(subModel.getCustomModelData());
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     public boolean place(@NotNull Player player, EquipmentSlot hand, @NotNull Location location) {
@@ -231,7 +384,7 @@ public class Furniture {
 
             subModelLocation.getBlock().setType(Material.AIR);
             ItemFrame subModelItemFrame = subModelLocation.getWorld().spawn(subModelLocation, ItemFrame.class, (frame) -> {
-                frame.setItem(generatedFrameItem);
+                frame.setItem(generateSubModelItem(subModel));
 
                 frame.setSilent(true);
                 frame.setVisible(false);
@@ -246,8 +399,6 @@ public class Furniture {
             });
 
             subModelLocation.getBlock().setType(Material.BARRIER);
-
-            subModelItemFrame.setItem(generatedItem);
         }
 
         // play placing animation & remove item from hand (if not in creative)
@@ -265,7 +416,28 @@ public class Furniture {
             }
         }
 
+        this.callFunction(
+                FunctionType.PLACE,
+                location,
+                player
+        );
+
         return true;
     }
 
+    public void callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer) {
+        if(!functions.containsKey(type)) return;
+
+        List<HashMap<String, Object>> funList = functions.get(type);
+
+        for(HashMap<String, Object> args : funList) {
+            FunctionManager.getInstance().call(
+                    args.get("type").toString(),
+                    args,
+                    interactingPlayer,
+                    this,
+                    clickedLocation
+            );
+        }
+    }
 }

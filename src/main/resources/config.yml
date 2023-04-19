@@ -1,6 +1,6 @@
 Furniture:
-  woodworks_table:
-    display: "&fWoodworks Table"
+  coffee_table:
+    display: '&fCoffee Table'
     item: PAPER
     model_data: 1
     rotation: 4
@@ -9,28 +9,24 @@ Furniture:
           x: 1
           y: 0
           z: 0
+        model_data: 3
+    # functions:
+    #   RIGHT_CLICK:
+    #   - type: COMMAND
+    #     command: help
+    overrides:
+      block-item:
         model_data: 2
-    functions:
-      right-click:
-        commands:
-          - type: COMMAND
-            command: "[OPEN_MENU] woodworks_table"
-    breaking:
-      drop: SELF
-      speed: 1
-  stone_chair:
-    display: "&fStone Chair"
+
+  stool:
+    display: '&fStool'
     item: PAPER
-    model_data: 3
+    model_data: 43
     rotation: 8
     functions:
-      right-click:
+      RIGHT_CLICK:
         - type: CHAIR
-          y-offset: 0.5
-    placing:
-      override: true
-      item: STONE
-      model_data: 1
+          y-offset: -0.5
 
 Options:
   checkForUpdates: true

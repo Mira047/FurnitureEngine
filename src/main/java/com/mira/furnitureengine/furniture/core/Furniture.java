@@ -545,12 +545,12 @@ public class Furniture {
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rot);
 
-            for(Entity entity : subModelLocation.getWorld().getNearbyEntities(subModelLocation.add(0.5, 0, 0.5), 0.2, 0.2, 0.2)) {
+            for(Entity entity : subModelLocation.getWorld().getNearbyEntities(subModelLocation, 0.2, 0.2, 0.2)) {
                 if(entity instanceof ItemFrame itemFrame) {
                     if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
                         itemFrame.remove();
 
-                        itemFrame.getLocation().getBlock().setType(Material.AIR);
+                        subModelLocation.getBlock().setType(Material.AIR);
 
                         break;
                     }

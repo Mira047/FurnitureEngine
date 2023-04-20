@@ -121,8 +121,6 @@ public class Utils {
 
                             Vector offset = subModel.getOffset().clone();
 
-                            System.out.println("Initial offset: " + offset);
-                            System.out.println("Rotation: " + rotation);
                             switch (rotation) {
                                 case NONE -> {
                                     return input.clone().subtract(offset);

@@ -1,6 +1,7 @@
 package com.mira.furnitureengine.furniture.core;
 
 import com.mira.furnitureengine.FurnitureEngine;
+import com.mira.furnitureengine.events.FurnitureBreakEvent;
 import com.mira.furnitureengine.events.FurniturePlaceEvent;
 import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.functions.FunctionManager;
@@ -8,8 +9,12 @@ import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockMultiPlaceEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -206,6 +211,10 @@ public class Furniture {
         return generatedFrameItem;
     }
 
+    public ItemStack getDropItem() {
+        return generatedDropItem;
+    }
+
     private void init() throws IllegalArgumentException {
         // Generate itemstack
         generatedItem = new ItemStack(material);
@@ -350,6 +359,13 @@ public class Furniture {
             return false;
         }
 
+        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(location.getBlock(), location.getBlock().getState(), location.getBlock().getRelative(BlockFace.UP), generatedFrameItem, player, true, hand);
+        plugin.getServer().getPluginManager().callEvent(blockPlaceEvent);
+
+        if(blockPlaceEvent.isCancelled()) {
+            return false;
+        }
+
         FurniturePlaceEvent event = new FurniturePlaceEvent(this, player, location);
         plugin.getServer().getPluginManager().callEvent(event);
 
@@ -425,8 +441,76 @@ public class Furniture {
         return true;
     }
 
-    public void callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer) {
-        if(!functions.containsKey(type)) return;
+    public boolean breakFurniture(@NotNull Player player, @NotNull Location location) {
+        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(location.getBlock(), player);
+        plugin.getServer().getPluginManager().callEvent(blockBreakEvent);
+
+        if(blockBreakEvent.isCancelled()) {
+            return false;
+        }
+
+        FurnitureBreakEvent event = new FurnitureBreakEvent(this, player, location);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            return false;
+        }
+
+        Rotation rot = null;
+        // Destroy the initial item frame + block
+        for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0, 0.5), 0.2, 0.2, 0.2)) {
+            if(entity instanceof ItemFrame) {
+                ItemFrame itemFrame = (ItemFrame) entity;
+
+                if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
+                    itemFrame.remove();
+
+                    rot = itemFrame.getRotation();
+
+                    location.getBlock().setType(Material.AIR);
+
+                    break;
+                }
+            }
+        }
+
+        if(rot == null) {
+            return false;
+        }
+
+        // Now time to destroy all submodels
+        for(SubModel subModel : subModels) {
+            Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rot);
+
+            for(Entity entity : subModelLocation.getWorld().getNearbyEntities(subModelLocation.add(0.5, 0, 0.5), 0.2, 0.2, 0.2)) {
+                if(entity instanceof ItemFrame itemFrame) {
+                    if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
+                        itemFrame.remove();
+
+                        itemFrame.getLocation().getBlock().setType(Material.AIR);
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        this.callFunction(
+                FunctionType.BREAK,
+                location,
+                player
+        );
+
+        // If the player isn't in creative, drop the item
+        if(!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
+            location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
+        }
+
+        return true;
+    }
+
+    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer) {
+        if(!functions.containsKey(type)) return false;
 
         List<HashMap<String, Object>> funList = functions.get(type);
 
@@ -439,5 +523,7 @@ public class Furniture {
                     clickedLocation
             );
         }
+
+        return true;
     }
 }

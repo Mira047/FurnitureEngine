@@ -4,6 +4,7 @@ import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -30,13 +31,11 @@ public class PlayerInteractListener implements Listener {
                 Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
                 if(furniture != null) {
-                    furniture.callFunction(
+                    if(furniture.callFunction(
                             FunctionType.RIGHT_CLICK,
                             event.getClickedBlock().getLocation(),
                             player
-                    );
-
-                    return;
+                    )) return;
                 }
 
                 if(Utils.isInteractable(event.getClickedBlock())) return;
@@ -73,9 +72,30 @@ public class PlayerInteractListener implements Listener {
         }
 
         // 2. Breaking
-        // for testing purposes, apply a breaking animation to all blocks
         if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
+            if(furniture != null) {
+                if(player.isSneaking()) {
+                    furniture.callFunction(
+                            FunctionType.SHIFT_LEFT_CLICK,
+                            event.getClickedBlock().getLocation(),
+                            player
+                    );
+                } else {
+                    furniture.callFunction(
+                            FunctionType.LEFT_CLICK,
+                            event.getClickedBlock().getLocation(),
+                            player
+                    );
+                }
+
+                Location origin = Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture);
+
+                if(origin != null) {
+                    furniture.breakFurniture(player, origin);
+                }
+            }
         }
     }
 }

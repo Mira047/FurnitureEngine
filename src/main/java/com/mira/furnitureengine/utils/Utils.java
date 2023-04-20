@@ -2,14 +2,18 @@ package com.mira.furnitureengine.utils;
 
 
 import com.mira.furnitureengine.furniture.core.Furniture;
+import com.mira.furnitureengine.furniture.core.SubModel;
 import org.bukkit.Location;
 import org.bukkit.Rotation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import java.util.Collection;
 
 public class Utils {
     private final static int FURNITURE_FORMAT_VERSION = 3;
@@ -68,6 +72,13 @@ public class Utils {
         return location;
     }
 
+    /**
+     * Used to get the location of a submodel from the origin
+     * @param input The origin
+     * @param offset The offset of the submodel
+     * @param rotation The rotation of the item
+     * @return The relative location
+     */
     public static Location getRelativeLocation(Location input, Vector offset, Rotation rotation) {
         switch(rotation) {
             case NONE -> {
@@ -87,6 +98,56 @@ public class Utils {
             }
         }
     }
+
+    /**
+     * Used to get the location of the origin from a submodel
+     * @param input The current location
+     * @param furniture The furniture
+     * @return The relative location
+     */
+    public static Location getOriginLocation(Location input, Furniture furniture) {
+        // Check for item frames
+        Collection<Entity> entities = input.getWorld().getNearbyEntities(input.clone().add(0.5, 0, 0.5), 0.2, 0.2, 0.2);
+        for(Entity entity : entities) {
+            if(entity instanceof ItemFrame frame) {
+                // Get the item and compare it to the furniture
+                if(itemsMatch(frame.getItem(), furniture.getBlockItem())) {
+                    return input.clone();
+                }
+                else {
+                    for(SubModel subModel : furniture.getSubModels()) {
+                        if(itemsMatch(frame.getItem(), furniture.generateSubModelItem(subModel))) {
+                            Rotation rotation = frame.getRotation();
+
+                            Vector offset = subModel.getOffset().clone();
+
+                            switch (rotation) {
+                                case NONE -> {
+                                    return input.clone().subtract(offset);
+                                }
+                                case CLOCKWISE -> {
+                                    return input.clone().subtract(-offset.getZ(), offset.getY(), offset.getX());
+                                }
+                                case FLIPPED -> {
+                                    return input.clone().subtract(-offset.getX(), offset.getY(), -offset.getZ());
+                                }
+                                case COUNTER_CLOCKWISE -> {
+                                    return input.clone().subtract(offset.getZ(), offset.getY(), -offset.getX());
+                                }
+                                default -> {
+                                    return input.clone();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+
 
     public static Rotation getRotation(Entity entity, Furniture.RotSides rotSides) {
         float y = entity.getLocation().getYaw();

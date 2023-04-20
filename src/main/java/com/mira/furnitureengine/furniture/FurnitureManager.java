@@ -87,7 +87,7 @@ public class FurnitureManager {
     /**
      * Checks if a block at a specific location is a furniture block. This also checks for submodels.
      * @param location The location of the block
-     * @return True if the block is a furniture block, false if not
+     * @return The furniture asset, or null if it's not a furniture block
      */
     public Furniture isFurniture(Location location) {
         // Check if there is a barrier block at the location

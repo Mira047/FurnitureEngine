@@ -38,7 +38,82 @@ public class CoreCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Incorrect Command usage!");
                     return false;
                 } else {
+                    if(args.length==2) {
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Incorrect Command usage!");
+                        return false;
+                    }
+                    else if(args.length==3) {
+                        Player target = plugin.getServer().getPlayer(args[1]);
 
+                        if(target==null) {
+                            sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Player not found!");
+                            return false;
+                        }
+                        else {
+                            Furniture furniture = FurnitureManager.getInstance().getFurniture(args[2]);
+
+                            if(furniture!=null) {
+                                ItemStack item = furniture.getGeneratedItem();
+
+                                if(item!=null) {
+                                    if(item.getType()==Material.TIPPED_ARROW) {
+                                        PotionMeta meta = ((PotionMeta) item.getItemMeta());
+                                        meta.setColor(Color.WHITE);
+                                        item.setItemMeta(meta);
+                                    }
+
+                                    target.getInventory().addItem(item);
+                                    sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GREEN + "Given " + ChatColor.YELLOW + furniture.getId() + ChatColor.GREEN + " to " + ChatColor.YELLOW + target.getName() + ChatColor.GREEN + "!");
+                                }
+                                else {
+                                    sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Failed to generate item!");
+                                }
+                            }
+                            else {
+                                sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Furniture not found!");
+                            }
+                        }
+                    }
+                    else if(args.length==4) {
+                        Player target = plugin.getServer().getPlayer(args[1]);
+
+                        if(target==null) {
+                            sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Player not found!");
+                            return false;
+                        }
+                        else {
+                            Furniture furniture = FurnitureManager.getInstance().getFurniture(args[2]);
+
+                            if(furniture!=null) {
+                                ItemStack item = furniture.getGeneratedItem();
+
+                                if(item!=null) {
+                                    if(item.getType()==Material.TIPPED_ARROW) {
+                                        PotionMeta meta = ((PotionMeta) item.getItemMeta());
+                                        meta.setColor(Color.WHITE);
+                                        item.setItemMeta(meta);
+                                    }
+
+                                    int amount = Integer.parseInt(args[3]);
+
+                                    if(amount>0) {
+                                        item.setAmount(amount);
+                                        target.getInventory().addItem(item);
+                                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GREEN + "Given " + ChatColor.YELLOW + furniture.getId() + ChatColor.GREEN + " to " + ChatColor.YELLOW + target.getName() + ChatColor.GREEN + "!");
+                                    }
+                                    else {
+                                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Invalid amount!");
+                                    }
+                                }
+                                else {
+                                    sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Failed to generate item!");
+                                }
+                            }
+                            else {
+                                sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Furniture not found!");
+                            }
+                        }
+                    }
                 }
 
                 return true;

@@ -25,6 +25,8 @@ public class SoundFunction implements Function {
         float volume = args.get("volume") == null ? 1 : (float) args.get("volume");
         float pitch = args.get("pitch") == null ? 1 : (float) args.get("pitch");
 
-        location.getWorld().playSound(location, sound, volume, pitch);
+        try {
+            location.getWorld().playSound(location, sound, volume, pitch);
+        } catch (Exception ignored) {}
     }
 }

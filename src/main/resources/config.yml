@@ -1,27 +1,4 @@
-Furniture:
-  coffee_table:
-    display: '&fCoffee Table'
-    item: PAPER
-    model_data: 1
-    rotation: 4
-    submodels:
-      - offset:
-          x: 1
-          y: 0
-          z: 0
-        model_data: 3
-    overrides:
-      block-item:
-        model_data: 2
+Furniture: {}
 
-  stool:
-    display: '&fStool'
-    item: PAPER
-    model_data: 43
-    rotation: 8
-    functions:
-      RIGHT_CLICK:
-        - type: CHAIR
-          y-offset: -0.5
 Options:
   checkForUpdates: true

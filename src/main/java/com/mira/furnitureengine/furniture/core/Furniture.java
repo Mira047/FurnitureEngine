@@ -16,8 +16,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -234,6 +236,9 @@ public class Furniture {
         }
         meta.setCustomModelData(modelData);
 
+        // If the item is tipped arrow, hide the potion effect
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+
         generatedItem.setItemMeta(meta);
 
 
@@ -347,6 +352,31 @@ public class Furniture {
         // Go thru all submodels and check if there is space for them
         Rotation rotation = Utils.getRotation(player, rotSides);
 
+        // Check if the item is a tipped arrow
+        boolean inheritColor; Color color;
+        if(generatedItem.getType() == Material.TIPPED_ARROW) {
+            ItemStack itemInHand = player.getInventory().getItemInMainHand();
+            if(itemInHand.getType() != Material.TIPPED_ARROW) {
+                itemInHand = player.getInventory().getItemInOffHand();
+            }
+            PotionMeta potionMeta = (PotionMeta) itemInHand.getItemMeta();
+            if(potionMeta != null) {
+                if(potionMeta.hasColor()) {
+                    inheritColor = true;
+                    color = potionMeta.getColor();
+                } else {
+                    color = null;
+                    inheritColor = false;
+                }
+            } else {
+                color = null;
+                inheritColor = false;
+            }
+        } else {
+            color = null;
+            inheritColor = false;
+        }
+
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
 
@@ -378,7 +408,18 @@ public class Furniture {
         // Spawn an item frame at the location
         ItemFrame itemFrame = location.getWorld().spawn(location, ItemFrame.class, (frame) -> {
             // Set the item frame's item to the generated item
-            frame.setItem(generatedFrameItem);
+            if(!inheritColor) {
+                frame.setItem(generatedFrameItem);
+            } else {
+                ItemStack item = generatedFrameItem.clone();
+                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                if(potionMeta != null) {
+                    potionMeta.setColor(color);
+                    item.setItemMeta(potionMeta);
+                }
+                frame.setItem(item);
+            }
+
 
             frame.setSilent(true);
             frame.setVisible(false);
@@ -400,7 +441,17 @@ public class Furniture {
 
             subModelLocation.getBlock().setType(Material.AIR);
             ItemFrame subModelItemFrame = subModelLocation.getWorld().spawn(subModelLocation, ItemFrame.class, (frame) -> {
-                frame.setItem(generateSubModelItem(subModel));
+                if(!inheritColor)
+                    frame.setItem(generateSubModelItem(subModel));
+                else {
+                    ItemStack item = generateSubModelItem(subModel).clone();
+                    PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                    if(potionMeta != null) {
+                        potionMeta.setColor(color);
+                        item.setItemMeta(potionMeta);
+                    }
+                    frame.setItem(item);
+                }
 
                 frame.setSilent(true);
                 frame.setVisible(false);
@@ -457,12 +508,24 @@ public class Furniture {
         }
 
         Rotation rot = null;
+        boolean inheritColor = false; Color color = Color.WHITE;
         // Destroy the initial item frame + block
         for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0, 0.5), 0.2, 0.2, 0.2)) {
-            if(entity instanceof ItemFrame) {
-                ItemFrame itemFrame = (ItemFrame) entity;
+            if(entity instanceof ItemFrame itemFrame) {
 
                 if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
+                    if(itemFrame.getItem().getType() == Material.TIPPED_ARROW) {
+                        PotionMeta potionMeta = (PotionMeta) itemFrame.getItem().getItemMeta();
+                        if(potionMeta != null) {
+                            color = potionMeta.getColor();
+                            inheritColor = true;
+                        } else {
+                            color = Color.WHITE;
+                        }
+                    } else {
+                        color = Color.WHITE;
+                    }
+                    
                     itemFrame.remove();
 
                     rot = itemFrame.getRotation();
@@ -503,7 +566,17 @@ public class Furniture {
 
         // If the player isn't in creative, drop the item
         if(!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
-            location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
+            if(!inheritColor)
+                location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
+            else {
+                ItemStack item = this.getDropItem().clone();
+                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                if(potionMeta != null) {
+                    potionMeta.setColor(color);
+                    item.setItemMeta(potionMeta);
+                }
+                location.getWorld().dropItemNaturally(location, item);
+            }
         }
 
         return true;

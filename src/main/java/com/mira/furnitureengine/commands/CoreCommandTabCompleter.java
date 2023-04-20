@@ -25,6 +25,7 @@ public class CoreCommandTabCompleter implements TabCompleter {
             autoCompletion.add("get");
             autoCompletion.add("execute");
             autoCompletion.add("reload");
+            autoCompletion.add("paint");
 
             return autoCompletion;
         }
@@ -66,6 +67,14 @@ public class CoreCommandTabCompleter implements TabCompleter {
 
                 return autoCompletion;
             }
+
+            return autoCompletion;
+        }
+
+        if(args[0].equals("paint")) {
+            List<String> autoCompletion = new ArrayList<>();
+
+            autoCompletion.add("#");
 
             return autoCompletion;
         }

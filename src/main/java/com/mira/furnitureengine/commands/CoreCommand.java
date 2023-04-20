@@ -4,11 +4,16 @@ import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class CoreCommand implements CommandExecutor {
@@ -51,6 +56,12 @@ public class CoreCommand implements CommandExecutor {
                                 ItemStack item = furniture.getGeneratedItem();
 
                                 if(item != null) {
+                                    if(item.getType() == Material.TIPPED_ARROW) {
+                                        PotionMeta meta = ((PotionMeta) item.getItemMeta());
+                                        meta.setColor(Color.WHITE);
+                                        item.setItemMeta(meta);
+                                    }
+
                                     player.getInventory().addItem(item);
                                     sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GREEN + "Given " + ChatColor.YELLOW + furniture.getId() + ChatColor.GREEN + " to " + ChatColor.YELLOW + player.getName() + ChatColor.GREEN + "!");
                                 } else {
@@ -67,6 +78,12 @@ public class CoreCommand implements CommandExecutor {
                                 ItemStack item = furniture.getGeneratedItem();
 
                                 if(item != null) {
+                                    if(item.getType() == Material.TIPPED_ARROW) {
+                                        PotionMeta meta = ((PotionMeta) item.getItemMeta());
+                                        meta.setColor(Color.WHITE);
+                                        item.setItemMeta(meta);
+                                    }
+
                                     int amount = Integer.parseInt(args[2]);
 
                                     if(amount > 0) {
@@ -87,6 +104,57 @@ public class CoreCommand implements CommandExecutor {
                 }
 
                 return true;
+            } else if (args[0].equals("paint")) {
+                if(args.length == 1) {
+                    sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Incorrect Command usage!");
+                    return false;
+                }
+
+                ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
+
+                if(!item.hasItemMeta()) {
+                    item = ((Player) sender).getInventory().getItemInOffHand();
+
+                    if(!item.hasItemMeta()) {
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "You must hold an item!");
+                        return true;
+                    }
+                }
+
+                if(item.getType() == Material.TIPPED_ARROW) {
+                    // Get hex color from the second argument
+                    String hex = args[1];
+
+                    PotionMeta meta = (PotionMeta) item.getItemMeta();
+
+                    if(hex.startsWith("#")) {
+                        hex = hex.substring(1);
+                    } else {
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Invalid hex color!");
+                        return true;
+                    }
+
+                    if(hex.length() != 6) {
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Invalid hex color!");
+                        return true;
+                    }
+
+                    try {
+                        int r = Integer.parseInt(hex.substring(0, 2), 16);
+                        int g = Integer.parseInt(hex.substring(2, 4), 16);
+                        int b = Integer.parseInt(hex.substring(4, 6), 16);
+
+                        meta.setColor(Color.fromRGB(r, g, b));
+                        item.setItemMeta(meta);
+
+                        ((Player) sender).playSound(((Player) sender).getLocation(), Sound.ENTITY_DOLPHIN_SPLASH, 1, 1);
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.GREEN + "Painted item!");
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "Invalid hex color!");
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.GOLD + "Furniture" + ChatColor.YELLOW + "Engine" + ChatColor.DARK_GRAY + " » " + ChatColor.RED + "This item is not paintable! (Tipped Arrow)");
+                }
             }
         }
         return false;

@@ -107,7 +107,7 @@ public class Utils {
      */
     public static Location getOriginLocation(Location input, Furniture furniture) {
         // Check for item frames
-        Collection<Entity> entities = input.getWorld().getNearbyEntities(input.clone().add(0.5, 0, 0.5), 0.2, 0.2, 0.2);
+        Collection<Entity> entities = input.getWorld().getNearbyEntities(input.clone().add(0.5, 0, 0.5), 0.1, 0.1, 0.1);
         for(Entity entity : entities) {
             if(entity instanceof ItemFrame frame) {
                 // Get the item and compare it to the furniture
@@ -121,6 +121,8 @@ public class Utils {
 
                             Vector offset = subModel.getOffset().clone();
 
+                            System.out.println("Initial offset: " + offset);
+                            System.out.println("Rotation: " + rotation);
                             switch (rotation) {
                                 case NONE -> {
                                     return input.clone().subtract(offset);
@@ -207,7 +209,7 @@ public class Utils {
 
     public static boolean entityObstructing(Location location) {
         // Check if there is an entity obstructing the location (but item frames get ignored)
-        for(Entity entity : location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5)) {
+        for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0.5, 0.5), 0.5, 0.5, 0.5)) {
             if(entity.getType().isAlive() && entity.getType() != EntityType.ITEM_FRAME) {
                 return true;
             }

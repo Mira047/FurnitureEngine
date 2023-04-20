@@ -47,6 +47,11 @@ public final class FurnitureEngine extends JavaPlugin {
 
         // Register events
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+
+        // wait for the server to finish loading
+        getServer().getScheduler().runTaskLater(this, () -> {
+            FurnitureManager.getInstance().reloadFurniture();
+        }, 20);
     }
 
     @Override

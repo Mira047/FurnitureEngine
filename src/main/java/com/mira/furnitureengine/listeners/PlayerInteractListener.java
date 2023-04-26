@@ -4,6 +4,7 @@ import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -12,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -60,6 +63,8 @@ public class PlayerInteractListener implements Listener {
             }
             if (item.getType() == Material.AIR) return;
 
+            if(player.getGameMode() == GameMode.ADVENTURE) return;
+
             // Check if the item is a furniture item
             if (item.hasItemMeta() && item.getItemMeta().hasCustomModelData()) {
                 for (Furniture  furniture : FurnitureManager.getInstance().getFurniture()) {
@@ -94,6 +99,36 @@ public class PlayerInteractListener implements Listener {
 
                 if(origin != null) {
                     furniture.breakFurniture(player, origin);
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityShoot(EntityShootBowEvent event) {
+        for (Furniture furniture : FurnitureManager.getInstance().getFurniture()) {
+            if(Utils.itemsMatch(event.getConsumable(), furniture.getGeneratedItem())) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        // Scenario - Block in off hand, furniture in main hand
+        // In this case cancel the event and place the furniture
+        if(event.getHand() == EquipmentSlot.OFF_HAND) {
+            ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+
+            if(item.getType().isAir()) return;
+
+            if (item.hasItemMeta() && item.getItemMeta().hasCustomModelData()) {
+                for (Furniture furniture : FurnitureManager.getInstance().getFurniture()) {
+                    if (Utils.itemsMatch(item, furniture.getGeneratedItem())) {
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
             }
         }

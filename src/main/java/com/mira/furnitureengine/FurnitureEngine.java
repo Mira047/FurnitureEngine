@@ -6,6 +6,7 @@ import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.functions.FunctionManager;
 import com.mira.furnitureengine.listeners.PlayerInteractListener;
 import com.mira.furnitureengine.utils.UpdateChecker;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -52,6 +53,9 @@ public final class FurnitureEngine extends JavaPlugin {
         getServer().getScheduler().runTaskLater(this, () -> {
             FurnitureManager.getInstance().reloadFurniture();
         }, 20);
+
+        // Register metrics
+        new Metrics(this, 13146);
     }
 
     @Override

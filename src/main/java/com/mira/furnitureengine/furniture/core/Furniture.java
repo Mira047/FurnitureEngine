@@ -385,7 +385,7 @@ public class Furniture {
             }
         }
 
-        if(Utils.entityObstructing(location)) {
+        if(Utils.isSolid(location.getBlock()) || Utils.entityObstructing(location)) {
             return false;
         }
 

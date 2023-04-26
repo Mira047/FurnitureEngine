@@ -18,6 +18,7 @@ public class FunctionManager {
         register(new CommandFunction());
         register(new SoundFunction());
         register(new SitFunction());
+        register(new SwingFunction());
     }
 
     public static FunctionManager getInstance() {

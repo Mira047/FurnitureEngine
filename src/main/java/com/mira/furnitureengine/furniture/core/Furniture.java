@@ -215,7 +215,7 @@ public class Furniture {
     }
 
     public ItemStack getDropItem() {
-        return generatedDropItem;
+        return generatedDropItem.clone();
     }
 
     private void init() throws IllegalArgumentException {
@@ -672,9 +672,9 @@ public class Furniture {
             // If the player isn't in creative, drop the item
             if (!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
                 if (!inheritColor)
-                    location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
+                    location.getWorld().dropItemNaturally(location, this.getDropItem());
                 else {
-                    ItemStack item = this.getDropItem().clone();
+                    ItemStack item = this.getDropItem();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
                     if (potionMeta != null) {
                         potionMeta.setColor(color);

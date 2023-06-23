@@ -33,7 +33,7 @@ public class ReplaceFunction implements Function {
         if(furniture == null) throw new UnknownError("No furniture found at origin location. How did this happen?");
 
         // rotation
-        Collection<Entity> entities = origin.getWorld().getNearbyEntities(origin, 0.2, 0.2, 0.2);
+        Collection<Entity> entities = origin.getWorld().getNearbyEntities(origin.clone().add(0.5, 0, 0.5), 0.2, 0.2, 0.2);
 
         Rotation rot = null;
 

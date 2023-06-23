@@ -37,7 +37,8 @@ public class PlayerInteractListener implements Listener {
                     if(furniture.callFunction(
                             FunctionType.RIGHT_CLICK,
                             event.getClickedBlock().getLocation(),
-                            player
+                            player,
+                            Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture)
                     )) return;
                 }
 
@@ -49,7 +50,8 @@ public class PlayerInteractListener implements Listener {
                     furniture.callFunction(
                             FunctionType.SHIFT_RIGHT_CLICK,
                             event.getClickedBlock().getLocation(),
-                            player
+                            player,
+                            Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture)
                     );
                 }
             }
@@ -78,6 +80,7 @@ public class PlayerInteractListener implements Listener {
 
         // 2. Breaking
         if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
+
             Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
             if(furniture != null) {
@@ -85,13 +88,15 @@ public class PlayerInteractListener implements Listener {
                     furniture.callFunction(
                             FunctionType.SHIFT_LEFT_CLICK,
                             event.getClickedBlock().getLocation(),
-                            player
+                            player,
+                            Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture)
                     );
                 } else {
                     furniture.callFunction(
                             FunctionType.LEFT_CLICK,
                             event.getClickedBlock().getLocation(),
-                            player
+                            player,
+                            Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture)
                     );
                 }
 

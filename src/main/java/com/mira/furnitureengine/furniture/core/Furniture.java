@@ -79,7 +79,8 @@ public class Furniture {
         }
 
         List<String> tempLore = plugin.getConfig().getStringList("Furniture." + id + ".lore");
-        if(tempLore.isEmpty()) {
+
+        if(!tempLore.isEmpty()) {
             lore = format(tempLore);
         } else {
             lore = null;
@@ -247,43 +248,55 @@ public class Furniture {
         if(plugin.getConfig().contains("Furniture." + id + ".overrides")) {
             // Drop item
             if(plugin.getConfig().contains("Furniture." + id + ".overrides.drop-item")) {
-                // Get fields (item, amount, model_data, display, lore)
-                Material dropItem = Material.getMaterial(plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.item", material.name()));
-                int dropAmount = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.amount", 1);
-                int dropModelData = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.model_data", modelData);
-                String dropDisplayName = plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.display", displayName);
-                List<String> dropLore = plugin.getConfig().getStringList("Furniture." + id + ".overrides.drop-item.lore");
+                // Priority: other furniture > custom override > default
+                String dropItemId = plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.furniture");
 
-                if(dropItem == null) {
-                    throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". Material is null.");
+                if(dropItemId == null) {
+
+                    // Get fields (item, amount, model_data, display, lore)
+                    Material dropItem = Material.getMaterial(plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.item", material.name()));
+                    int dropAmount = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.amount", 1);
+                    int dropModelData = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.model_data", modelData);
+                    String dropDisplayName = plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.display", displayName);
+                    List<String> dropLore = plugin.getConfig().getStringList("Furniture." + id + ".overrides.drop-item.lore");
+
+                    if (dropItem == null) {
+                        throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". Material is null.");
+                    }
+
+                    // Generate item
+                    ItemStack drop = new ItemStack(dropItem);
+                    drop.setAmount(dropAmount);
+
+                    ItemMeta dropMeta = drop.getItemMeta();
+
+                    if (dropMeta == null) {
+                        throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". ItemMeta is null. (Material: " + dropItem + ")");
+                    }
+
+                    if (dropDisplayName != null) {
+                        dropMeta.setDisplayName(dropDisplayName);
+                    }
+
+                    if (!dropLore.isEmpty()) {
+                        dropMeta.setLore(dropLore);
+                    }
+
+                    if (dropModelData != 0) {
+                        dropMeta.setCustomModelData(dropModelData);
+                    }
+
+                    drop.setItemMeta(dropMeta);
+
+                    // Now set it
+                    generatedDropItem = drop;
+                } else {
+                    try {
+                        generatedDropItem = FurnitureManager.getInstance().getFurniture(dropItemId).getDropItem();
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("Furniture with id " + dropItemId + " does not exist. Please load it before loading " + id + ".");
+                    }
                 }
-
-                // Generate item
-                ItemStack drop = new ItemStack(dropItem);
-                drop.setAmount(dropAmount);
-
-                ItemMeta dropMeta = drop.getItemMeta();
-
-                if(dropMeta == null) {
-                    throw new IllegalArgumentException("Failed to generate drop item for furniture " + id + ". ItemMeta is null. (Material: " + dropItem + ")");
-                }
-
-                if(dropDisplayName != null) {
-                    dropMeta.setDisplayName(dropDisplayName);
-                }
-
-                if(!dropLore.isEmpty()) {
-                    dropMeta.setLore(dropLore);
-                }
-
-                if(dropModelData != 0) {
-                    dropMeta.setCustomModelData(dropModelData);
-                }
-
-                drop.setItemMeta(dropMeta);
-
-                // Now set it
-                generatedDropItem = drop;
             }
             if(plugin.getConfig().contains("Furniture." + id + ".overrides.block-item")) {
                 // Get fields (item, model_data, display, lore)
@@ -486,22 +499,118 @@ public class Furniture {
         this.callFunction(
                 FunctionType.PLACE,
                 location,
-                player
+                player,
+                location
         );
 
         return true;
     }
 
-    public boolean breakFurniture(@NotNull Player player, @NotNull Location location) {
-        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(location.getBlock(), player);
-        plugin.getServer().getPluginManager().callEvent(blockBreakEvent);
+    public boolean spawn(@NotNull Location location, @NotNull Rotation rotation, @Nullable Color color) {
+        boolean inheritColor;
+        inheritColor = generatedItem.getType() == Material.TIPPED_ARROW && color != null;
 
-        if(blockBreakEvent.isCancelled()) {
+        for(SubModel subModel : subModels) {
+            Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
+
+            if(Utils.isSolid(subModelLocation.getBlock()) || Utils.entityObstructing(subModelLocation)) {
+                return false;
+            }
+        }
+
+        if(Utils.isSolid(location.getBlock()) || Utils.entityObstructing(location)) {
             return false;
+        }
+
+        FurniturePlaceEvent event = new FurniturePlaceEvent(this, null, location);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            return false;
+        }
+
+        // Set a barrier block at the location
+        location.getBlock().setType(Material.AIR);
+        // Spawn an item frame at the location
+        ItemFrame itemFrame = location.getWorld().spawn(location, ItemFrame.class, (frame) -> {
+            // Set the item frame's item to the generated item
+            if(!inheritColor) {
+                frame.setItem(generatedFrameItem);
+            } else {
+                ItemStack item = generatedFrameItem.clone();
+                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                if(potionMeta != null) {
+                    potionMeta.setColor(color);
+                    item.setItemMeta(potionMeta);
+                }
+                frame.setItem(item);
+            }
+
+
+            frame.setSilent(true);
+            frame.setVisible(false);
+            frame.setFixed(true);
+            frame.setInvulnerable(true);
+
+            frame.setRotation(rotation);
+
+            frame.setFacingDirection(BlockFace.UP);
+
+            frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+        });
+
+        location.getBlock().setType(Material.BARRIER);
+
+        // Now go thru all submodels and place them
+        for(SubModel subModel : subModels) {
+            Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
+
+            subModelLocation.getBlock().setType(Material.AIR);
+            ItemFrame subModelItemFrame = subModelLocation.getWorld().spawn(subModelLocation, ItemFrame.class, (frame) -> {
+                if(!inheritColor)
+                    frame.setItem(generateSubModelItem(subModel));
+                else {
+                    ItemStack item = generateSubModelItem(subModel).clone();
+                    PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                    if(potionMeta != null) {
+                        potionMeta.setColor(color);
+                        item.setItemMeta(potionMeta);
+                    }
+                    frame.setItem(item);
+                }
+
+                frame.setSilent(true);
+                frame.setVisible(false);
+                frame.setFixed(true);
+                frame.setInvulnerable(true);
+
+                frame.setRotation(rotation);
+
+                frame.setFacingDirection(BlockFace.UP);
+
+                frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+            });
+
+            subModelLocation.getBlock().setType(Material.BARRIER);
+        }
+
+        return true;
+    }
+
+    public boolean breakFurniture(@Nullable Player player, @NotNull Location location) {
+        if(player != null) {
+            BlockBreakEvent blockBreakEvent = new BlockBreakEvent(location.getBlock(), player);
+            plugin.getServer().getPluginManager().callEvent(blockBreakEvent);
+
+            if (blockBreakEvent.isCancelled()) {
+                return false;
+            }
         }
 
         FurnitureBreakEvent event = new FurnitureBreakEvent(this, player, location);
         plugin.getServer().getPluginManager().callEvent(event);
+
+        plugin.getLogger().info("breakFurniture: " + this);
 
         if(event.isCancelled()) {
             return false;
@@ -519,13 +628,9 @@ public class Furniture {
                         if(potionMeta != null) {
                             color = potionMeta.getColor();
                             inheritColor = true;
-                        } else {
-                            color = Color.WHITE;
                         }
-                    } else {
-                        color = Color.WHITE;
                     }
-                    
+
                     itemFrame.remove();
 
                     rot = itemFrame.getRotation();
@@ -558,31 +663,34 @@ public class Furniture {
             }
         }
 
-        this.callFunction(
-                FunctionType.BREAK,
-                location,
-                player
-        );
+        if(player != null) {
+            this.callFunction(
+                    FunctionType.BREAK,
+                    location,
+                    player,
+                    location
+            );
 
-        // If the player isn't in creative, drop the item
-        if(!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
-            if(!inheritColor)
-                location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
-            else {
-                ItemStack item = this.getDropItem().clone();
-                PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
-                if(potionMeta != null) {
-                    potionMeta.setColor(color);
-                    item.setItemMeta(potionMeta);
+            // If the player isn't in creative, drop the item
+            if (!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
+                if (!inheritColor)
+                    location.getWorld().dropItemNaturally(location, this.getDropItem().clone());
+                else {
+                    ItemStack item = this.getDropItem().clone();
+                    PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+                    if (potionMeta != null) {
+                        potionMeta.setColor(color);
+                        item.setItemMeta(potionMeta);
+                    }
+                    location.getWorld().dropItemNaturally(location, item);
                 }
-                location.getWorld().dropItemNaturally(location, item);
             }
         }
 
         return true;
     }
 
-    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer) {
+    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer, Location originLocation) {
         if(!functions.containsKey(type)) return false;
 
         List<HashMap<String, Object>> funList = functions.get(type);
@@ -593,7 +701,8 @@ public class Furniture {
                     args,
                     interactingPlayer,
                     this,
-                    clickedLocation
+                    clickedLocation,
+                    originLocation
             );
         }
 

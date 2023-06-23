@@ -20,9 +20,9 @@ public class SwingFunction implements Function {
 
         String arm = (String) args.get("arm");
 
-        if(arm.equalsIgnoreCase("left")) {
+        if(arm.equalsIgnoreCase("right")) {
             player.swingMainHand();
-        } else if(arm.equalsIgnoreCase("right")) {
+        } else if(arm.equalsIgnoreCase("left")) {
             player.swingOffHand();
         } else {
             throw new IllegalArgumentException("Invalid argument: arm");

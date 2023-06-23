@@ -30,7 +30,11 @@ public class CommandFunction implements Function {
                 .replace("%world%", ((Location) args.get("location")).getWorld().getName())
                 .replace("%location_x%", ((Location) args.get("location")).getX() + "")
                 .replace("%location_y%", ((Location) args.get("location")).getY() + "")
-                .replace("%location_z%", ((Location) args.get("location")).getZ() + "");
+                .replace("%location_z%", ((Location) args.get("location")).getZ() + "")
+                .replace("%origin%", ((Location) args.get("origin")).getX() + " " + ((Location) args.get("origin")).getY() + " " + ((Location) args.get("origin")).getZ())
+                .replace("%origin_x%", ((Location) args.get("origin")).getX() + "")
+                .replace("%origin_y%", ((Location) args.get("origin")).getY() + "")
+                .replace("%origin_z%", ((Location) args.get("origin")).getZ() + "");
 
         Player player = (Player) args.get("player");
         boolean isOperator = player.isOp();
@@ -43,7 +47,7 @@ public class CommandFunction implements Function {
                 player.setOp(isOperator);
             }
         } else if (command.startsWith("[console]")) {
-            Bukkit.getServer().dispatchCommand((CommandSender) Bukkit.getServer().getConsoleSender(), command.substring(9));
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command.substring(9));
         } else {
             player.performCommand(command);
         }

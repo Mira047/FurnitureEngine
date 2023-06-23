@@ -19,6 +19,7 @@ public class FunctionManager {
         register(new SoundFunction());
         register(new SitFunction());
         register(new SwingFunction());
+        register(new ReplaceFunction());
     }
 
     public static FunctionManager getInstance() {
@@ -34,14 +35,16 @@ public class FunctionManager {
         FurnitureEngine.getInstance().getLogger().info("Registered function: " + function.getType());
     }
 
-    public void call(String type, HashMap<String, Object> args, Player player, Furniture furniture, Location blockLocation) {
+    public void call(String type, HashMap<String, Object> args, Player player, Furniture furniture, Location interactLocation, Location originLocation) {
         HashMap<String, Object> argsCopy = new HashMap<>(args);
 
         argsCopy.put("player", player);
 
         argsCopy.put("furniture", furniture);
 
-        argsCopy.put("location", blockLocation);
+        argsCopy.put("location", interactLocation);
+
+        argsCopy.put("origin", originLocation);
 
         try {
             functions.get(type).execute(argsCopy);

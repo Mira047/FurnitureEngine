@@ -3,7 +3,9 @@ package com.mira.furnitureengine.utils;
 
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.core.SubModel;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Rotation;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -11,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
@@ -70,6 +73,26 @@ public class Utils {
         }
 
         return location;
+    }
+
+    /**
+     * Used to check if furniture (presumably with submodels) can space to be placed at a specific location
+     * @param location The location to check
+     * @param rotation The rotation of the furniture
+     * @param furniture The furniture to check
+     * @return Whether the furniture can be placed or not
+     */
+    public static boolean hasSpace(Location location, Rotation rotation, Furniture furniture) {
+        if(Utils.isSolid(location.getBlock())) return false;
+
+        if(furniture.getSubModels().size() == 0) return true;
+
+        for(SubModel subModel : furniture.getSubModels()) {
+            Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
+            if(Utils.isSolid(subModelLocation.getBlock())) return false;
+        }
+
+        return true;
     }
 
     /**
@@ -266,5 +289,30 @@ public class Utils {
 
             return true;
         }
+    }
+
+    /**
+     * Gets the color of furniture, if it is colorable
+     * @param location The location of the furniture
+     * @return The color of the block, or null if it is not colorable
+     */
+    public static Color getColor(Location location) {
+        Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2);
+
+        for (Entity entity : entities) {
+            if (entity.getType() != EntityType.ITEM_FRAME) continue;
+
+            ItemFrame itemFrame = (ItemFrame) entity;
+
+            if (itemFrame.getItem().getType() == Material.TIPPED_ARROW) {
+                PotionMeta potionMeta = (PotionMeta) itemFrame.getItem().getItemMeta();
+
+                if (potionMeta.hasColor()) {
+                    return potionMeta.getColor();
+                } else return null;
+            }
+        }
+
+        return null;
     }
 }

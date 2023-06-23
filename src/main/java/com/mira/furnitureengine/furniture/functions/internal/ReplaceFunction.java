@@ -48,12 +48,14 @@ public class ReplaceFunction implements Function {
             }
         }
 
-        if(rot == null) throw new UnknownError("No item frame found at origin location. How did this happen?");
+        if(rot == null) {
+            throw new UnknownError("No item frame found at origin location. How did this happen?");
+        }
 
         Furniture newFurniture = FurnitureManager.getInstance().getFurniture(furnitureOverride);
 
-        if(! Utils.hasSpace(origin, rot, newFurniture)) {
-            FurnitureEngine.getInstance().getLogger().warning("Failed to replace furniture: no space");
+        if(!Utils.hasSpace(origin, rot, newFurniture)) {
+            return;
         }
 
         Color color = Utils.getColor(origin);

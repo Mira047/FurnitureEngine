@@ -513,12 +513,12 @@ public class Furniture {
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
 
-            if(Utils.isSolid(subModelLocation.getBlock()) || Utils.entityObstructing(subModelLocation)) {
+            if(Utils.isSolid(subModelLocation.getBlock())) {
                 return false;
             }
         }
 
-        if(Utils.isSolid(location.getBlock()) || Utils.entityObstructing(location)) {
+        if(Utils.isSolid(location.getBlock())) {
             return false;
         }
 
@@ -609,8 +609,6 @@ public class Furniture {
 
         FurnitureBreakEvent event = new FurnitureBreakEvent(this, player, location);
         plugin.getServer().getPluginManager().callEvent(event);
-
-        plugin.getLogger().info("breakFurniture: " + this);
 
         if(event.isCancelled()) {
             return false;

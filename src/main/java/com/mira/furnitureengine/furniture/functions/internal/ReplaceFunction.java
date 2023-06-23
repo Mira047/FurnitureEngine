@@ -54,13 +54,17 @@ public class ReplaceFunction implements Function {
 
         Furniture newFurniture = FurnitureManager.getInstance().getFurniture(furnitureOverride);
 
-        if(!Utils.hasSpace(origin, rot, newFurniture)) {
-            return;
-        }
-
         Color color = Utils.getColor(origin);
 
         furniture.breakFurniture(null, origin);
+
+        if(!Utils.hasSpace(origin, rot, newFurniture)) {
+            // Respawn the old furniture
+            furniture.spawn(origin, rot, color);
+
+            return;
+        }
+
 
         newFurniture.spawn(origin, rot, color);
     }

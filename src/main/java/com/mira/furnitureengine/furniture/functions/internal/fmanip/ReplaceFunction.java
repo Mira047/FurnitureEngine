@@ -1,9 +1,10 @@
-package com.mira.furnitureengine.furniture.functions.internal;
+package com.mira.furnitureengine.furniture.functions.internal.fmanip;
 
 import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.functions.Function;
+import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -11,6 +12,7 @@ import org.bukkit.Rotation;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,6 +56,11 @@ public class ReplaceFunction implements Function {
 
         Furniture newFurniture = FurnitureManager.getInstance().getFurniture(furnitureOverride);
 
+        if(newFurniture == null) {
+            FurnitureEngine.getInstance().getLogger().warning("Failed to replace furniture: " + furnitureOverride + " does not exist.");
+            return;
+        }
+
         Color color = Utils.getColor(origin);
 
         furniture.breakFurniture(null, origin);
@@ -65,7 +72,13 @@ public class ReplaceFunction implements Function {
             return;
         }
 
-
         newFurniture.spawn(origin, rot, color);
+
+        newFurniture.callFunction(
+                FunctionType.REPLACE,
+                (Location) args.get("location"),
+                (Player) args.get("player"),
+                Utils.getOriginLocation((Location) args.get("location"), newFurniture)
+        );
     }
 }

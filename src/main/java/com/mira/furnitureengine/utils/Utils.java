@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Utils {
     private final static int FURNITURE_FORMAT_VERSION = 3;
@@ -104,9 +105,6 @@ public class Utils {
      */
     public static Location getRelativeLocation(Location input, Vector offset, Rotation rotation) {
         switch(rotation) {
-            case NONE -> {
-                return input.clone().add(offset);
-            }
             case CLOCKWISE -> {
                 return input.clone().add(-offset.getZ(), offset.getY(), offset.getX());
             }
@@ -117,7 +115,7 @@ public class Utils {
                 return input.clone().add(offset.getZ(), offset.getY(), -offset.getX());
             }
             default -> {
-                return input.clone();
+                return input.clone().add(offset);
             }
         }
     }
@@ -145,9 +143,6 @@ public class Utils {
                             Vector offset = subModel.getOffset().clone();
 
                             switch (rotation) {
-                                case NONE -> {
-                                    return input.clone().subtract(offset);
-                                }
                                 case CLOCKWISE -> {
                                     return input.clone().subtract(-offset.getZ(), offset.getY(), offset.getX());
                                 }
@@ -158,7 +153,7 @@ public class Utils {
                                     return input.clone().subtract(offset.getZ(), offset.getY(), -offset.getX());
                                 }
                                 default -> {
-                                    return input.clone();
+                                    return input.clone().subtract(offset);
                                 }
                             }
                         }
@@ -314,5 +309,20 @@ public class Utils {
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the furniture is only vertical (no sideways submodels)
+     * @param subModels The submodels to check
+     * @return Whether the furniture is only vertical or not
+     */
+    public static boolean onlyVertical(List<SubModel> subModels) {
+        for(SubModel subModel : subModels) {
+            if(subModel.getOffset().getX() != 0 || subModel.getOffset().getZ() != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

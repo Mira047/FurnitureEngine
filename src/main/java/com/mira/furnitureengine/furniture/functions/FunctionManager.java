@@ -4,6 +4,7 @@ package com.mira.furnitureengine.furniture.functions;
 import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.functions.internal.*;
+import com.mira.furnitureengine.furniture.functions.internal.fmanip.ReplaceFunction;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

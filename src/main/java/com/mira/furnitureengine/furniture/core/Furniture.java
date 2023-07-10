@@ -101,10 +101,6 @@ public class Furniture {
         // Get all submodels (object list)
         try {
             for (Object obj : plugin.getConfig().getList("Furniture." + id + ".submodels", new ArrayList<>())) {
-                if(rotSides == RotSides.EIGHT_SIDED) {
-                    throw new IllegalArgumentException("Furniture " + id + " has 8 sided rotation, but has submodels. This is not allowed.");
-                }
-
                 // Example format: {offset={x=1, y=0, z=0}, model_data=2}
                 if (obj instanceof Map<?, ?> map) {
                     Vector offset = map.get("offset") instanceof Map<?, ?> offsetMap ? new Vector(
@@ -129,6 +125,14 @@ public class Furniture {
             plugin.getLogger().warning("Failed to load submodels for furniture " + id + ". Error: " + e.getMessage());
 
             throw new IllegalArgumentException("Failed to load submodels for furniture " + id + ". Error: " + e.getMessage());
+        }
+
+        if(!subModels.isEmpty()) {
+            if(!Utils.onlyVertical(subModels)) {
+                if(rotSides == RotSides.EIGHT_SIDED) {
+                    throw new IllegalArgumentException("Furniture " + id + " has 8 sided rotation, but has horizontal submodels. This is not allowed.");
+                }
+            }
         }
 
         // And now get all functions
@@ -238,7 +242,8 @@ public class Furniture {
         meta.setCustomModelData(modelData);
 
         // If the item is tipped arrow, hide the potion effect
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        if(material == Material.TIPPED_ARROW)
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
         generatedItem.setItemMeta(meta);
 
@@ -275,11 +280,11 @@ public class Furniture {
                     }
 
                     if (dropDisplayName != null) {
-                        dropMeta.setDisplayName(dropDisplayName);
+                        dropMeta.setDisplayName(format(dropDisplayName));
                     }
 
                     if (!dropLore.isEmpty()) {
-                        dropMeta.setLore(dropLore);
+                        dropMeta.setLore(format(dropLore));
                     }
 
                     if (dropModelData != 0) {
@@ -320,11 +325,11 @@ public class Furniture {
                 }
 
                 if(blockDisplayName != null) {
-                    blockMeta.setDisplayName(blockDisplayName);
+                    blockMeta.setDisplayName(format(blockDisplayName));
                 }
 
                 if(!blockLore.isEmpty()) {
-                    blockMeta.setLore(blockLore);
+                    blockMeta.setLore(format(blockLore));
                 }
 
                 if(blockModelData != 0) {
@@ -340,7 +345,9 @@ public class Furniture {
 
         // if there is no drop item, use the generated item (and same for block item)
         if(generatedDropItem == null) {
-            generatedDropItem = generatedItem;
+            ItemStack drop = generatedItem.clone();
+            drop.setAmount(1);
+            generatedDropItem = drop;
         }
         if(generatedFrameItem == null) {
             generatedFrameItem = generatedItem;

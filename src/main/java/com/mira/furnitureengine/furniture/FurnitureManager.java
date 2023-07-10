@@ -49,7 +49,7 @@ public class FurnitureManager {
     }
 
     public void reloadFurniture() {
-        loadFurniture(false);
+        loadFurniture(true);
     }
 
     /**

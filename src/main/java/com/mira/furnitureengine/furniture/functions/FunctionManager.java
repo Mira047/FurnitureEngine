@@ -21,6 +21,7 @@ public class FunctionManager {
         register(new SitFunction());
         register(new SwingFunction());
         register(new ReplaceFunction());
+        register(new ParticleFunction());
     }
 
     public static FunctionManager getInstance() {

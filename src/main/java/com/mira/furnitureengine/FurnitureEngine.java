@@ -4,12 +4,9 @@ import com.mira.furnitureengine.commands.CoreCommand;
 import com.mira.furnitureengine.commands.CoreCommandTabCompleter;
 import com.mira.furnitureengine.furniture.FurnitureManager;
 import com.mira.furnitureengine.furniture.functions.FunctionManager;
-import com.mira.furnitureengine.listeners.PlayerInteractListener;
+import com.mira.furnitureengine.listeners.*;
 import com.mira.furnitureengine.utils.UpdateChecker;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FurnitureEngine extends JavaPlugin {
@@ -34,9 +31,7 @@ public final class FurnitureEngine extends JavaPlugin {
 
         if(this.getConfig().getBoolean("Options.checkForUpdates")) {
             new UpdateChecker(97134).getVersion(version -> {
-                if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                    this.getLogger().info("You are running the latest version of FurnitureEngine!");
-                } else {
+                if (!this.getDescription().getVersion().startsWith(version)) {
                     this.getLogger().info("There is a new update available for FurnitureEngine!" + " (Current version: " + this.getDescription().getVersion() + " New version: " + version + ")");
                 }
             });
@@ -48,6 +43,7 @@ public final class FurnitureEngine extends JavaPlugin {
 
         // Register events
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new HangingBreakListener(), this);
 
         // Register metrics
         new Metrics(this, 13146);

@@ -403,6 +403,13 @@ public class Furniture {
             if(Utils.isSolid(subModelLocation.getBlock()) || Utils.entityObstructing(subModelLocation)) {
                 return false;
             }
+
+            BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(subModelLocation.getBlock(), subModelLocation.getBlock().getState(), subModelLocation.getBlock().getRelative(BlockFace.UP), generateSubModelItem(subModel), player, true, hand);
+            plugin.getServer().getPluginManager().callEvent(blockPlaceEvent);
+
+            if(blockPlaceEvent.isCancelled()) {
+                return false;
+            }
         }
 
         if(Utils.isSolid(location.getBlock()) || Utils.entityObstructing(location)) {
@@ -621,6 +628,15 @@ public class Furniture {
             return false;
         }
 
+        if(player != null) {
+            this.callFunction(
+                    FunctionType.BREAK,
+                    location,
+                    player,
+                    location
+            );
+        }
+
         Rotation rot = null;
         boolean inheritColor = false; Color color = Color.WHITE;
         // Destroy the initial item frame + block
@@ -651,6 +667,8 @@ public class Furniture {
             return false;
         }
 
+        Location originalLocation = location.clone();
+
         // Now time to destroy all submodels
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rot);
@@ -662,6 +680,15 @@ public class Furniture {
 
                         subModelLocation.getBlock().setType(Material.AIR);
 
+                        if(player!=null) {
+                            this.callFunction(
+                                    FunctionType.SUBMODEL_BREAK,
+                                    subModelLocation.clone().add(-0.5, 0, -0.5),
+                                    player,
+                                    originalLocation
+                            );
+                        }
+
                         break;
                     }
                 }
@@ -669,17 +696,10 @@ public class Furniture {
         }
 
         if(player != null) {
-            this.callFunction(
-                    FunctionType.BREAK,
-                    location,
-                    player,
-                    location
-            );
-
             // If the player isn't in creative, drop the item
             if (!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
                 if (!inheritColor)
-                    location.getWorld().dropItemNaturally(location, this.getDropItem());
+                    location.getWorld().dropItemNaturally(location.clone().add(-0.5, 0, -0.5), this.getDropItem());
                 else {
                     ItemStack item = this.getDropItem();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -687,7 +707,7 @@ public class Furniture {
                         potionMeta.setColor(color);
                         item.setItemMeta(potionMeta);
                     }
-                    location.getWorld().dropItemNaturally(location, item);
+                    location.getWorld().dropItemNaturally(location.clone().add(-0.5, 0, -0.5), item);
                 }
             }
         }

@@ -6,6 +6,7 @@ public enum FunctionType {
     SHIFT_RIGHT_CLICK,
     SHIFT_LEFT_CLICK,
     BREAK,
+    SUBMODEL_BREAK,
     PLACE,
     REPLACE; // Used when furniture is replaced by another furniture
 }

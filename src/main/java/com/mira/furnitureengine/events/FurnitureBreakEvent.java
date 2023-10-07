@@ -51,6 +51,10 @@ public class FurnitureBreakEvent extends Event {
         return handlers;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public boolean isDroppingItems() {
         return isDroppingItems;
     }

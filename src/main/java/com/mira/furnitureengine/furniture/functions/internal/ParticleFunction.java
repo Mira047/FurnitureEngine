@@ -1,6 +1,7 @@
 package com.mira.furnitureengine.furniture.functions.internal;
 
 import com.mira.furnitureengine.furniture.functions.Function;
+import com.mira.furnitureengine.furniture.functions.FunctionType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,7 +19,16 @@ public class ParticleFunction implements Function {
     public void execute(HashMap<String, Object> args) throws IllegalArgumentException {
         Location location = (Location) args.get("location");
 
-        location = location.clone().add(0.5, 0.5, 0.5);
+        FunctionType ftype = (FunctionType) args.get("functionType");
+        
+        switch (ftype) {
+            case BREAK -> {
+                location = location.clone().add(0, 0.5, 0);
+            }
+            case SUBMODEL_BREAK -> {
+                location = location.clone().add(0.5, 0.5, 0.5);
+            }
+        }
 
         if(!args.containsKey("particle")) throw new IllegalArgumentException("Missing argument: particle");
 

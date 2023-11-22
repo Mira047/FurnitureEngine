@@ -78,7 +78,8 @@ public class ReplaceFunction implements Function {
                 FunctionType.REPLACE,
                 (Location) args.get("location"),
                 (Player) args.get("player"),
-                Utils.getOriginLocation((Location) args.get("location"), newFurniture)
+                Utils.getOriginLocation((Location) args.get("location"), newFurniture),
+                Utils.getFrame((Location) args.get("location"))
         );
     }
 }

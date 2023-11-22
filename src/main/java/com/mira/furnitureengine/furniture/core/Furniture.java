@@ -514,7 +514,8 @@ public class Furniture {
                 FunctionType.PLACE,
                 location,
                 player,
-                location
+                location,
+                itemFrame
         );
 
         return true;
@@ -628,15 +629,6 @@ public class Furniture {
             return false;
         }
 
-        if(player != null) {
-            this.callFunction(
-                    FunctionType.BREAK,
-                    location,
-                    player,
-                    location
-            );
-        }
-
         Rotation rot = null;
         boolean inheritColor = false; Color color = Color.WHITE;
         // Destroy the initial item frame + block
@@ -650,6 +642,16 @@ public class Furniture {
                             color = potionMeta.getColor();
                             inheritColor = true;
                         }
+                    }
+
+                    if(player != null) {
+                        this.callFunction(
+                                FunctionType.BREAK,
+                                location,
+                                player,
+                                location,
+                                itemFrame
+                                );
                     }
 
                     itemFrame.remove();
@@ -685,7 +687,8 @@ public class Furniture {
                                     FunctionType.SUBMODEL_BREAK,
                                     subModelLocation.clone().add(-0.5, 0, -0.5),
                                     player,
-                                    originalLocation
+                                    originalLocation,
+                                    itemFrame
                             );
                         }
 
@@ -715,19 +718,22 @@ public class Furniture {
         return true;
     }
 
-    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer, Location originLocation) {
+    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer, Location originLocation, Entity frame) {
         if(!functions.containsKey(type)) return false;
 
         List<HashMap<String, Object>> funList = functions.get(type);
 
         for(HashMap<String, Object> args : funList) {
+            args.put("functionType", type);
+
             FunctionManager.getInstance().call(
                     args.get("type").toString(),
                     args,
                     interactingPlayer,
                     this,
                     clickedLocation,
-                    originLocation
+                    originLocation,
+                    frame
             );
         }
 

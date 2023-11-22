@@ -165,6 +165,16 @@ public class Utils {
         return null;
     }
 
+    public static Entity getFrame(Location loc) {
+        Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc.clone().add(0.5, 0, 0.5), 0.1, 0.1, 0.1);
+        for(Entity entity : entities) {
+            if(entity instanceof ItemFrame frame) {
+                return frame;
+            }
+        }
+        return null;
+    }
+
 
 
     public static Rotation getRotation(Entity entity, Furniture.RotSides rotSides) {

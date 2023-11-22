@@ -5,7 +5,9 @@ import com.mira.furnitureengine.FurnitureEngine;
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.functions.internal.*;
 import com.mira.furnitureengine.furniture.functions.internal.fmanip.ReplaceFunction;
+import com.mira.furnitureengine.furniture.functions.internal.storage.DataSetFunction;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class FunctionManager {
         register(new SwingFunction());
         register(new ReplaceFunction());
         register(new ParticleFunction());
+        register(new DataSetFunction());
     }
 
     public static FunctionManager getInstance() {
@@ -37,7 +40,7 @@ public class FunctionManager {
         FurnitureEngine.getInstance().getLogger().info("Registered function: " + function.getType());
     }
 
-    public void call(String type, HashMap<String, Object> args, Player player, Furniture furniture, Location interactLocation, Location originLocation) {
+    public void call(String type, HashMap<String, Object> args, Player player, Furniture furniture, Location interactLocation, Location originLocation, Entity frame) {
         HashMap<String, Object> argsCopy = new HashMap<>(args);
 
         argsCopy.put("player", player);
@@ -47,6 +50,8 @@ public class FunctionManager {
         argsCopy.put("location", interactLocation);
 
         argsCopy.put("origin", originLocation);
+
+        argsCopy.put("entity", frame);
 
         try {
             functions.get(type).execute(argsCopy);

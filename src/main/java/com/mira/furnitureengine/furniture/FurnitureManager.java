@@ -18,11 +18,13 @@ import java.util.List;
 public class FurnitureManager {
     private static FurnitureManager instance;
 
-    private static final FurnitureEngine plugin = FurnitureEngine.getInstance();
+    private static FurnitureEngine plugin;
 
     private final List<Furniture> furniture = new ArrayList<>();
 
     private FurnitureManager() {
+        plugin = FurnitureEngine.getInstance();
+
         loadFurniture(true);
     }
 

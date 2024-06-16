@@ -39,6 +39,7 @@ public class PlayerInteractListener implements Listener {
 
                 if(furniture != null) {
                     if(furniture.callFunction(
+                            event,
                             FunctionType.RIGHT_CLICK,
                             event.getClickedBlock().getLocation(),
                             player,
@@ -55,6 +56,7 @@ public class PlayerInteractListener implements Listener {
 
                 if(furniture != null) {
                     furniture.callFunction(
+                            event,
                             FunctionType.SHIFT_RIGHT_CLICK,
                             event.getClickedBlock().getLocation(),
                             player,
@@ -94,6 +96,7 @@ public class PlayerInteractListener implements Listener {
             if(furniture != null) {
                 if(player.isSneaking()) {
                     furniture.callFunction(
+                            event,
                             FunctionType.SHIFT_LEFT_CLICK,
                             event.getClickedBlock().getLocation(),
                             player,
@@ -102,6 +105,7 @@ public class PlayerInteractListener implements Listener {
                     );
                 } else {
                     furniture.callFunction(
+                            event,
                             FunctionType.LEFT_CLICK,
                             event.getClickedBlock().getLocation(),
                             player,

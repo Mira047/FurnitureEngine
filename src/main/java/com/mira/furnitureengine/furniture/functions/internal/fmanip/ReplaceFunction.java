@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -74,7 +75,10 @@ public class ReplaceFunction implements Function {
 
         newFurniture.spawn(origin, rot, color);
 
+        Event event = (Event) args.get("event");
+
         newFurniture.callFunction(
+                event,
                 FunctionType.REPLACE,
                 (Location) args.get("location"),
                 (Player) args.get("player"),

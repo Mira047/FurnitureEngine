@@ -9,6 +9,7 @@ import com.mira.furnitureengine.furniture.functions.internal.storage.DataSetFunc
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
@@ -40,8 +41,10 @@ public class FunctionManager {
         FurnitureEngine.getInstance().getLogger().info("Registered function: " + function.getType());
     }
 
-    public void call(String type, HashMap<String, Object> args, Player player, Furniture furniture, Location interactLocation, Location originLocation, Entity frame) {
+    public void call(Event event, String type, HashMap<String, Object> args, Player player, Furniture furniture, Location interactLocation, Location originLocation, Entity frame) {
         HashMap<String, Object> argsCopy = new HashMap<>(args);
+
+        argsCopy.put("event", event);
 
         argsCopy.put("player", player);
 

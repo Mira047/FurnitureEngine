@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -511,6 +512,7 @@ public class Furniture {
         }
 
         this.callFunction(
+                blockPlaceEvent,
                 FunctionType.PLACE,
                 location,
                 player,
@@ -613,8 +615,9 @@ public class Furniture {
     }
 
     public boolean breakFurniture(@Nullable Player player, @NotNull Location location) {
+        BlockBreakEvent blockBreakEvent = null;
         if(player != null) {
-            BlockBreakEvent blockBreakEvent = new BlockBreakEvent(location.getBlock(), player);
+            blockBreakEvent = new BlockBreakEvent(location.getBlock(), player);
             plugin.getServer().getPluginManager().callEvent(blockBreakEvent);
 
             if (blockBreakEvent.isCancelled()) {
@@ -646,6 +649,7 @@ public class Furniture {
 
                     if(player != null) {
                         this.callFunction(
+                                blockBreakEvent,
                                 FunctionType.BREAK,
                                 location,
                                 player,
@@ -684,6 +688,7 @@ public class Furniture {
 
                         if(player!=null) {
                             this.callFunction(
+                                    blockBreakEvent,
                                     FunctionType.SUBMODEL_BREAK,
                                     subModelLocation.clone().add(-0.5, 0, -0.5),
                                     player,
@@ -718,7 +723,7 @@ public class Furniture {
         return true;
     }
 
-    public boolean callFunction(FunctionType type, Location clickedLocation, Player interactingPlayer, Location originLocation, Entity frame) {
+    public boolean callFunction(Event event, FunctionType type, Location clickedLocation, Player interactingPlayer, Location originLocation, Entity frame) {
         if(!functions.containsKey(type)) return false;
 
         List<HashMap<String, Object>> funList = functions.get(type);
@@ -727,6 +732,7 @@ public class Furniture {
             args.put("functionType", type);
 
             FunctionManager.getInstance().call(
+                    event,
                     args.get("type").toString(),
                     args,
                     interactingPlayer,

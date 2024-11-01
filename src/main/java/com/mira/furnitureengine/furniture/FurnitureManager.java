@@ -24,13 +24,12 @@ public class FurnitureManager {
 
     private FurnitureManager() {
         plugin = FurnitureEngine.getInstance();
-
-        loadFurniture(true);
     }
 
     public static FurnitureManager getInstance() {
         if(instance == null) {
             instance = new FurnitureManager();
+            instance.loadFurniture(true);
         }
         return instance;
     }

@@ -114,6 +114,8 @@ public class PlayerInteractListener implements Listener {
                     );
                 }
 
+                if(player.getGameMode() == GameMode.ADVENTURE) return;
+
                 Location origin = Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture);
 
                 if(origin != null) {

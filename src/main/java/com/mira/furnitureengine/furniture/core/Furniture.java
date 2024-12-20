@@ -242,13 +242,13 @@ public class Furniture {
         }
         meta.setCustomModelData(modelData);
 
-        // If the item is tipped arrow, hide the potion effect
-        if(material == Material.TIPPED_ARROW)
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        // If the item is tipped arrow, remove the potion effect
+        if(material == Material.TIPPED_ARROW) {
+            PotionMeta potionMeta = (PotionMeta) meta;
+            potionMeta.clearCustomEffects();
+        }
 
         generatedItem.setItemMeta(meta);
-
-
 
         // Load overrides (drop-item, block-item)
         if(plugin.getConfig().contains("Furniture." + id + ".overrides")) {

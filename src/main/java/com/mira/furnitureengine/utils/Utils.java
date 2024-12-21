@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class Utils {
-    private final static int FURNITURE_FORMAT_VERSION = 3;
+    private final static int FURNITURE_FORMAT_VERSION = 4;
 
     public final static NamespacedKey FURNITURE_ID_KEY = new NamespacedKey("furnitureengine", "furniture_id");
 

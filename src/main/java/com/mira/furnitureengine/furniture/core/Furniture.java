@@ -436,7 +436,7 @@ public class Furniture {
         // Set a barrier block at the location
         location.getBlock().setType(Material.AIR);
         // Spawn an item frame at the location
-        ItemDisplay ItemDisplay = location.getWorld().spawn(location, ItemDisplay.class, (display) -> {
+        ItemDisplay itemDisplay = location.getWorld().spawn(location, ItemDisplay.class, (display) -> {
             // Set the item frame's item to the generated item
             if(!inheritColor) {
                 display.setItemStack(generatedFrameItem);
@@ -454,6 +454,20 @@ public class Furniture {
 
             display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
         });
+
+        this.callFunction(
+                blockPlaceEvent,
+                FunctionType.PLACE,
+                location,
+                player,
+                location,
+                itemDisplay
+        );
+
+        if(blockPlaceEvent.isCancelled()) {
+            itemDisplay.remove();
+            return false;
+        }
 
         location.getBlock().setType(Material.BARRIER);
 
@@ -497,15 +511,6 @@ public class Furniture {
                 player.getInventory().getItemInOffHand().setAmount(player.getInventory().getItemInOffHand().getAmount() - 1);
             }
         }
-
-        this.callFunction(
-                blockPlaceEvent,
-                FunctionType.PLACE,
-                location,
-                player,
-                location,
-                ItemDisplay
-        );
 
         return true;
     }
@@ -627,6 +632,10 @@ public class Furniture {
                                 location,
                                 display
                                 );
+                    }
+
+                    if(blockBreakEvent.isCancelled()) {
+                        return false;
                     }
 
                     display.remove();

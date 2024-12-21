@@ -90,8 +90,6 @@ public class PlayerInteractListener implements Listener {
 
             Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
-            System.out.println(furniture);
-
             if(furniture != null) {
                 if(player.isSneaking()) {
                     furniture.callFunction(

@@ -604,8 +604,6 @@ public class Furniture {
             return false;
         }
 
-        System.out.println("Breaking furniture");
-
         Rotation rot = null;
         boolean inheritColor = false; Color color = Color.WHITE;
         // Destroy the initial item frame + block
@@ -630,8 +628,6 @@ public class Furniture {
                                 display
                                 );
                     }
-
-                    System.out.println("Removing item display");
 
                     display.remove();
 

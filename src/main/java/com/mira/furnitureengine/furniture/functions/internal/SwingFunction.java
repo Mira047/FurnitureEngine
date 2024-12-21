@@ -3,6 +3,8 @@ package com.mira.furnitureengine.furniture.functions.internal;
 import com.mira.furnitureengine.furniture.functions.Function;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
@@ -15,6 +17,10 @@ public class SwingFunction implements Function {
     @Override
     public void execute(HashMap<String, Object> args) throws IllegalArgumentException {
         Player player = (Player) args.get("player");
+
+        Event event = (Event) args.get("event");
+
+        if(event instanceof Cancellable && ((Cancellable) event).isCancelled()) return;
 
         if(!args.containsKey("arm")) throw new IllegalArgumentException("Missing argument: arm");
 

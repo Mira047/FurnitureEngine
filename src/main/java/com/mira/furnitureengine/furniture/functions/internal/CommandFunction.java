@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
@@ -19,6 +21,10 @@ public class CommandFunction implements Function {
     @Override
     public void execute(HashMap<String, Object> args) throws IllegalArgumentException {
         if (!args.containsKey("command")) throw new IllegalArgumentException("Missing argument: command");
+
+        Event event = (Event) args.get("event");
+
+        if(event instanceof Cancellable && ((Cancellable) event).isCancelled()) return;
 
         String command = (String) args.get("command");
 

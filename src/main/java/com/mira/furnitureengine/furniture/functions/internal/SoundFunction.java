@@ -4,6 +4,8 @@ import com.mira.furnitureengine.furniture.functions.Function;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
@@ -17,6 +19,10 @@ public class SoundFunction implements Function {
     public void execute(HashMap<String, Object> args) {
         Player player = (Player) args.get("player");
         Location location = (Location) args.get("location");
+
+        Event event = (Event) args.get("event");
+
+        if(event instanceof Cancellable && ((Cancellable) event).isCancelled()) return;
 
         if(!args.containsKey("sound")) throw new IllegalArgumentException("Missing argument: sound");
 

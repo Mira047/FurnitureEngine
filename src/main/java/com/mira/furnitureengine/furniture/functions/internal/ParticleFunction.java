@@ -5,6 +5,8 @@ import com.mira.furnitureengine.furniture.functions.FunctionType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.material.MaterialData;
 
 import java.util.HashMap;
@@ -20,6 +22,10 @@ public class ParticleFunction implements Function {
         Location location = (Location) args.get("location");
 
         FunctionType ftype = (FunctionType) args.get("functionType");
+
+        Event event = (Event) args.get("event");
+
+        if(event instanceof Cancellable && ((Cancellable) event).isCancelled()) return;
         
         switch (ftype) {
             case BREAK -> {

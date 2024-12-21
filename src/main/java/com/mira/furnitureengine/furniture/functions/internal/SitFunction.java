@@ -6,6 +6,8 @@ import dev.geco.gsit.api.GSitAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.HashMap;
@@ -21,12 +23,16 @@ public class SitFunction implements Function {
         Player player = (Player) args.get("player");
         Location location = (Location) args.get("location");
 
+        Event event = (Event) args.get("event");
+
+        if(event instanceof Cancellable && ((Cancellable) event).isCancelled()) return;
+
         float yOffset = args.get("y-offset") == null ? 0 : ((Double) args.get("y-offset")).floatValue();
 
         PluginManager pm = Bukkit.getServer().getPluginManager();
 
         if(pm.getPlugin("GSit") != null) {
-            if (GSitAPI.getSeats(location.getBlock()).size() == 0) {
+            if (GSitAPI.getSeats(location.getBlock()).isEmpty()) {
                 GSitAPI.createSeat(location.getBlock(), player, true, 0, yOffset, 0, 0, true);
             }
         } else if(pm.getPlugin("Sittable") != null) {

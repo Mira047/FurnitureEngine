@@ -7,10 +7,7 @@ import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +32,7 @@ public class PlayerInteractListener implements Listener {
                 // Check if the block is a furniture block
                 Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
-                Entity frame = Utils.getFrame(event.getClickedBlock().getLocation());
+                Entity frame = Utils.getDisplay(event.getClickedBlock().getLocation());
 
                 if(furniture != null) {
                     if(furniture.callFunction(
@@ -52,7 +49,7 @@ public class PlayerInteractListener implements Listener {
             } else {
                 Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
-                Entity frame = Utils.getFrame(event.getClickedBlock().getLocation());
+                Entity frame = Utils.getDisplay(event.getClickedBlock().getLocation());
 
                 if(furniture != null) {
                     furniture.callFunction(
@@ -93,6 +90,8 @@ public class PlayerInteractListener implements Listener {
 
             Furniture furniture = FurnitureManager.getInstance().isFurniture(event.getClickedBlock().getLocation());
 
+            System.out.println(furniture);
+
             if(furniture != null) {
                 if(player.isSneaking()) {
                     furniture.callFunction(
@@ -101,7 +100,7 @@ public class PlayerInteractListener implements Listener {
                             event.getClickedBlock().getLocation(),
                             player,
                             Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture),
-                            Utils.getFrame(event.getClickedBlock().getLocation())
+                            Utils.getDisplay(event.getClickedBlock().getLocation())
                     );
                 } else {
                     furniture.callFunction(
@@ -110,7 +109,7 @@ public class PlayerInteractListener implements Listener {
                             event.getClickedBlock().getLocation(),
                             player,
                             Utils.getOriginLocation(event.getClickedBlock().getLocation(), furniture),
-                            Utils.getFrame(event.getClickedBlock().getLocation())
+                            Utils.getDisplay(event.getClickedBlock().getLocation())
                     );
                 }
 

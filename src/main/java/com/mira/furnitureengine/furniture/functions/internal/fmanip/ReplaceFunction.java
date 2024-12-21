@@ -11,7 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Rotation;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -43,10 +43,10 @@ public class ReplaceFunction implements Function {
         for (Entity entity : entities) {
             if (entity.getType() != EntityType.ITEM_FRAME) continue;
 
-            ItemFrame itemFrame = (ItemFrame) entity;
+            ItemDisplay display = (ItemDisplay) entity;
 
-            if (Utils.itemsMatch(itemFrame.getItem(), furniture.getBlockItem())) {
-                rot = itemFrame.getRotation();
+            if (Utils.itemsMatch(display.getItemStack(), furniture.getBlockItem())) {
+                // rot = ItemDisplay.getRotation();
                 break;
             }
         }
@@ -83,7 +83,7 @@ public class ReplaceFunction implements Function {
                 (Location) args.get("location"),
                 (Player) args.get("player"),
                 Utils.getOriginLocation((Location) args.get("location"), newFurniture),
-                Utils.getFrame((Location) args.get("location"))
+                Utils.getDisplay((Location) args.get("location"))
         );
     }
 }

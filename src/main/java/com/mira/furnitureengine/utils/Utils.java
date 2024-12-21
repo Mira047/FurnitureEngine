@@ -3,15 +3,12 @@ package com.mira.furnitureengine.utils;
 
 import com.mira.furnitureengine.furniture.core.Furniture;
 import com.mira.furnitureengine.furniture.core.SubModel;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Rotation;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.util.Vector;
@@ -21,6 +18,9 @@ import java.util.List;
 
 public class Utils {
     private final static int FURNITURE_FORMAT_VERSION = 3;
+
+    public final static NamespacedKey FURNITURE_ID_KEY = new NamespacedKey("furnitureengine", "furniture_id");
+
 
     public static int getFurnitureFormatVersion() {
         return FURNITURE_FORMAT_VERSION;
@@ -32,19 +32,12 @@ public class Utils {
         if(item1.getType() != item2.getType()) return false;
 
         if(item1.hasItemMeta() && item2.hasItemMeta()) {
-            if(item1.getItemMeta().hasDisplayName() && item2.getItemMeta().hasDisplayName()) {
-                if(!item1.getItemMeta().getDisplayName().equals(item2.getItemMeta().getDisplayName())) return false;
-            }
-            if(item1.getItemMeta().hasLore() && item2.getItemMeta().hasLore()) {
-                if(!item1.getItemMeta().getLore().equals(item2.getItemMeta().getLore())) return false;
-            }
-
             if(item1.getItemMeta().hasCustomModelData() && item2.getItemMeta().hasCustomModelData()) {
-                if(item1.getItemMeta().getCustomModelData() != item2.getItemMeta().getCustomModelData()) return false;
+                return item1.getItemMeta().getCustomModelData() == item2.getItemMeta().getCustomModelData();
             }
         }
 
-        return true;
+        return false;
     }
 
     public static Location calculatePlacingLocation(Block clickedBlock, BlockFace clickedFace) {
@@ -86,7 +79,7 @@ public class Utils {
     public static boolean hasSpace(Location location, Rotation rotation, Furniture furniture) {
         if(Utils.isSolid(location.getBlock())) return false;
 
-        if(furniture.getSubModels().size() == 0) return true;
+        if(furniture.getSubModels().isEmpty()) return true;
 
         for(SubModel subModel : furniture.getSubModels()) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
@@ -128,17 +121,18 @@ public class Utils {
      */
     public static Location getOriginLocation(Location input, Furniture furniture) {
         // Check for item frames
-        Collection<Entity> entities = input.getWorld().getNearbyEntities(input.clone().add(0.5, 0, 0.5), 0.1, 0.1, 0.1);
+        Collection<Entity> entities = input.getWorld().getNearbyEntities(input.clone().add(0.5, 0.5, 0.5), 0.1, 0.1, 0.1);
         for(Entity entity : entities) {
-            if(entity instanceof ItemFrame frame) {
+            if(entity instanceof ItemDisplay display) {
                 // Get the item and compare it to the furniture
-                if(itemsMatch(frame.getItem(), furniture.getBlockItem())) {
+                if(itemsMatch(display.getItemStack(), furniture.getBlockItem())) {
                     return input.clone();
                 }
                 else {
                     for(SubModel subModel : furniture.getSubModels()) {
-                        if(itemsMatch(frame.getItem(), furniture.generateSubModelItem(subModel))) {
-                            Rotation rotation = frame.getRotation();
+                        if(itemsMatch(display.getItemStack(), furniture.generateSubModelItem(subModel))) {
+                            float y = display.getLocation().getYaw();
+                            Rotation rotation = Utils.rotationFromAngle(y);
 
                             Vector offset = subModel.getOffset().clone();
 
@@ -165,17 +159,67 @@ public class Utils {
         return null;
     }
 
-    public static Entity getFrame(Location loc) {
-        Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc.clone().add(0.5, 0, 0.5), 0.1, 0.1, 0.1);
+    public static Entity getDisplay(Location loc) {
+        Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc.clone().add(0.5, 0.5, 0.5), 0.1, 0.1, 0.1);
         for(Entity entity : entities) {
-            if(entity instanceof ItemFrame frame) {
-                return frame;
+            if(entity instanceof ItemDisplay display) {
+                return display;
             }
         }
         return null;
     }
 
+    public static float angleFromRotation(Rotation rot) {
+        switch (rot) {
+            case NONE -> {
+                return 0;
+            }
+            case CLOCKWISE_45 -> {
+                return 45;
+            }
+            case CLOCKWISE -> {
+                return 90;
+            }
+            case CLOCKWISE_135 -> {
+                return 135;
+            }
+            case FLIPPED -> {
+                return 180;
+            }
+            case COUNTER_CLOCKWISE -> {
+                return 270;
+            }
+            case COUNTER_CLOCKWISE_45 -> {
+                return 315;
+            }
+            case FLIPPED_45 -> {
+                return 225;
+            }
+        }
 
+        return 0;
+    }
+
+    public static Rotation rotationFromAngle(float angle) {
+        // just in case it actualy isnt a proper angle :scream:
+        angle = ((angle % 360) + 360) % 360;
+
+        // math is mathing
+        int index = Math.round(angle / 45) % 8;
+
+        // oh fuck kinda cool
+        return switch (index) {
+            case 0 -> Rotation.NONE;              // 0
+            case 1 -> Rotation.CLOCKWISE_45;      // 45
+            case 2 -> Rotation.CLOCKWISE;         // 90
+            case 3 -> Rotation.CLOCKWISE_135;     // 135
+            case 4 -> Rotation.FLIPPED;           // 180
+            case 5 -> Rotation.FLIPPED_45;        // 225
+            case 6 -> Rotation.COUNTER_CLOCKWISE; // 270
+            case 7 -> Rotation.COUNTER_CLOCKWISE_45; // 315
+            default -> Rotation.NONE;             // :whale:
+        };
+    }
 
     public static Rotation getRotation(Entity entity, Furniture.RotSides rotSides) {
         float y = entity.getLocation().getYaw();
@@ -236,7 +280,7 @@ public class Utils {
     public static boolean entityObstructing(Location location) {
         // Check if there is an entity obstructing the location (but item frames get ignored)
         for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0.5, 0.5), 0.5, 0.5, 0.5)) {
-            if(entity.getType().isAlive() && entity.getType() != EntityType.ITEM_FRAME) {
+            if(entity.getType().isAlive() && entity.getType() != EntityType.ITEM_DISPLAY) {
                 return true;
             }
         }
@@ -307,10 +351,10 @@ public class Utils {
         for (Entity entity : entities) {
             if (entity.getType() != EntityType.ITEM_FRAME) continue;
 
-            ItemFrame itemFrame = (ItemFrame) entity;
+            ItemDisplay display = (ItemDisplay) entity;
 
-            if (itemFrame.getItem().getType() == Material.TIPPED_ARROW) {
-                PotionMeta potionMeta = (PotionMeta) itemFrame.getItem().getItemMeta();
+            if (display.getItemStack().getType() == Material.TIPPED_ARROW) {
+                PotionMeta potionMeta = (PotionMeta) display.getItemStack().getItemMeta();
 
                 if (potionMeta.hasColor()) {
                     return potionMeta.getColor();

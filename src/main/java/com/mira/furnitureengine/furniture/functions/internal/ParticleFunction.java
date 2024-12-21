@@ -23,10 +23,10 @@ public class ParticleFunction implements Function {
         
         switch (ftype) {
             case BREAK -> {
-                location = location.clone().add(0, 0.5, 0);
+                location = location.clone().add(0, 0, 0);
             }
             case SUBMODEL_BREAK -> {
-                location = location.clone().add(0.5, 0.5, 0.5);
+                location = location.clone().add(0.5, 0, 0.5);
             }
         }
 

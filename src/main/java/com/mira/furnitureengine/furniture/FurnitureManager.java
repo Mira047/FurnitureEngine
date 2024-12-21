@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.ItemDisplay;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,23 +95,23 @@ public class FurnitureManager {
         if (location.getBlock().getType() != Material.BARRIER) return null;
 
         // Get the middle of the block, so that it's as accurate as possible
-        location = location.clone().add(0.5, 0, 0.5);
+        location = location.clone().add(0.5, 0.5, 0.5);
 
         // get all entities at the location, and check if one of them is an item frame
         Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2);
 
         for (Entity entity : entities) {
-            if (entity.getType() != EntityType.ITEM_FRAME) continue;
+            if (entity.getType() != EntityType.ITEM_DISPLAY) continue;
 
-            ItemFrame itemFrame = (ItemFrame) entity;
+            ItemDisplay display = (ItemDisplay) entity;
 
             // Check if the item is a furniture item
             for (Furniture furniture : this.furniture) {
-                if (Utils.itemsMatch(itemFrame.getItem(), furniture.getBlockItem())) return furniture;
+                if (Utils.itemsMatch(display.getItemStack(), furniture.getBlockItem())) return furniture;
 
                 // Additionally, check if any of the submodels match
                 for (SubModel subModel : furniture.getSubModels()) {
-                    if (Utils.itemsMatch(itemFrame.getItem(), furniture.generateSubModelItem(subModel))) return furniture;
+                    if (Utils.itemsMatch(display.getItemStack(), furniture.generateSubModelItem(subModel))) return furniture;
                 }
             }
         }

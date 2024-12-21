@@ -10,7 +10,7 @@ import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -235,12 +235,13 @@ public class Furniture {
         }
 
         if(displayName != null) {
-            meta.setDisplayName(displayName);
+            meta.setItemName(displayName);
         }
         if(lore != null) {
             meta.setLore(lore);
         }
         meta.setCustomModelData(modelData);
+        meta.setItemModel(new NamespacedKey("furniture", id));
 
         // If the item is tipped arrow, remove the potion effect
         if(material == Material.TIPPED_ARROW) {
@@ -258,7 +259,6 @@ public class Furniture {
                 String dropItemId = plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.furniture");
 
                 if(dropItemId == null) {
-
                     // Get fields (item, amount, model_data, display, lore)
                     Material dropItem = Material.getMaterial(plugin.getConfig().getString("Furniture." + id + ".overrides.drop-item.item", material.name()));
                     int dropAmount = plugin.getConfig().getInt("Furniture." + id + ".overrides.drop-item.amount", 1);
@@ -281,7 +281,7 @@ public class Furniture {
                     }
 
                     if (dropDisplayName != null) {
-                        dropMeta.setDisplayName(format(dropDisplayName));
+                        dropMeta.setItemName(format(dropDisplayName));
                     }
 
                     if (!dropLore.isEmpty()) {
@@ -326,7 +326,7 @@ public class Furniture {
                 }
 
                 if(blockDisplayName != null) {
-                    blockMeta.setDisplayName(format(blockDisplayName));
+                    blockMeta.setItemName(format(blockDisplayName));
                 }
 
                 if(!blockLore.isEmpty()) {
@@ -335,6 +335,7 @@ public class Furniture {
 
                 if(blockModelData != 0) {
                     blockMeta.setCustomModelData(blockModelData);
+                    blockMeta.setItemModel(new NamespacedKey("furniture", id + "_block"));
                 }
 
                 block.setItemMeta(blockMeta);
@@ -363,6 +364,7 @@ public class Furniture {
         assert meta != null;
 
         meta.setCustomModelData(subModel.getCustomModelData());
+        meta.setItemModel(new NamespacedKey("furniture", id + "_submodel_" + subModel.getCustomModelData()));
 
         item.setItemMeta(meta);
 
@@ -434,10 +436,10 @@ public class Furniture {
         // Set a barrier block at the location
         location.getBlock().setType(Material.AIR);
         // Spawn an item frame at the location
-        ItemFrame itemFrame = location.getWorld().spawn(location, ItemFrame.class, (frame) -> {
+        ItemDisplay ItemDisplay = location.getWorld().spawn(location, ItemDisplay.class, (display) -> {
             // Set the item frame's item to the generated item
             if(!inheritColor) {
-                frame.setItem(generatedFrameItem);
+                display.setItemStack(generatedFrameItem);
             } else {
                 ItemStack item = generatedFrameItem.clone();
                 PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -445,20 +447,12 @@ public class Furniture {
                     potionMeta.setColor(color);
                     item.setItemMeta(potionMeta);
                 }
-                frame.setItem(item);
+                display.setItemStack(item);
             }
 
+            display.setRotation(Utils.angleFromRotation(rotation), 0);
 
-            frame.setSilent(true);
-            frame.setVisible(false);
-            frame.setFixed(true);
-            frame.setInvulnerable(true);
-
-            frame.setRotation(rotation);
-
-            frame.setFacingDirection(BlockFace.UP);
-
-            frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+            display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
         });
 
         location.getBlock().setType(Material.BARRIER);
@@ -468,9 +462,9 @@ public class Furniture {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
 
             subModelLocation.getBlock().setType(Material.AIR);
-            ItemFrame subModelItemFrame = subModelLocation.getWorld().spawn(subModelLocation, ItemFrame.class, (frame) -> {
+            ItemDisplay subModelItemDisplay = subModelLocation.getWorld().spawn(subModelLocation, ItemDisplay.class, (display) -> {
                 if(!inheritColor)
-                    frame.setItem(generateSubModelItem(subModel));
+                    display.setItemStack(generateSubModelItem(subModel));
                 else {
                     ItemStack item = generateSubModelItem(subModel).clone();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -478,19 +472,12 @@ public class Furniture {
                         potionMeta.setColor(color);
                         item.setItemMeta(potionMeta);
                     }
-                    frame.setItem(item);
+                    display.setItemStack(item);
                 }
 
-                frame.setSilent(true);
-                frame.setVisible(false);
-                frame.setFixed(true);
-                frame.setInvulnerable(true);
+                display.setRotation(Utils.angleFromRotation(rotation), 0);
 
-                frame.setRotation(rotation);
-
-                frame.setFacingDirection(BlockFace.UP);
-
-                frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+                display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
             });
 
             subModelLocation.getBlock().setType(Material.BARRIER);
@@ -517,7 +504,7 @@ public class Furniture {
                 location,
                 player,
                 location,
-                itemFrame
+                ItemDisplay
         );
 
         return true;
@@ -549,10 +536,10 @@ public class Furniture {
         // Set a barrier block at the location
         location.getBlock().setType(Material.AIR);
         // Spawn an item frame at the location
-        ItemFrame itemFrame = location.getWorld().spawn(location, ItemFrame.class, (frame) -> {
+        ItemDisplay ItemDisplay = location.getWorld().spawn(location, ItemDisplay.class, (display) -> {
             // Set the item frame's item to the generated item
             if(!inheritColor) {
-                frame.setItem(generatedFrameItem);
+                display.setItemStack(generatedFrameItem);
             } else {
                 ItemStack item = generatedFrameItem.clone();
                 PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -560,20 +547,12 @@ public class Furniture {
                     potionMeta.setColor(color);
                     item.setItemMeta(potionMeta);
                 }
-                frame.setItem(item);
+                display.setItemStack(item);
             }
 
+            display.setRotation(Utils.angleFromRotation(rotation), 0);
 
-            frame.setSilent(true);
-            frame.setVisible(false);
-            frame.setFixed(true);
-            frame.setInvulnerable(true);
-
-            frame.setRotation(rotation);
-
-            frame.setFacingDirection(BlockFace.UP);
-
-            frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+            display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
         });
 
         location.getBlock().setType(Material.BARRIER);
@@ -583,9 +562,9 @@ public class Furniture {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
 
             subModelLocation.getBlock().setType(Material.AIR);
-            ItemFrame subModelItemFrame = subModelLocation.getWorld().spawn(subModelLocation, ItemFrame.class, (frame) -> {
+            ItemDisplay subModelItemDisplay = subModelLocation.getWorld().spawn(subModelLocation, ItemDisplay.class, (display) -> {
                 if(!inheritColor)
-                    frame.setItem(generateSubModelItem(subModel));
+                    display.setItemStack(generateSubModelItem(subModel));
                 else {
                     ItemStack item = generateSubModelItem(subModel).clone();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -593,19 +572,12 @@ public class Furniture {
                         potionMeta.setColor(color);
                         item.setItemMeta(potionMeta);
                     }
-                    frame.setItem(item);
+                    display.setItemStack(item);
                 }
 
-                frame.setSilent(true);
-                frame.setVisible(false);
-                frame.setFixed(true);
-                frame.setInvulnerable(true);
+                display.setRotation(Utils.angleFromRotation(rotation), 0);
 
-                frame.setRotation(rotation);
-
-                frame.setFacingDirection(BlockFace.UP);
-
-                frame.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
+                display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
             });
 
             subModelLocation.getBlock().setType(Material.BARRIER);
@@ -632,15 +604,16 @@ public class Furniture {
             return false;
         }
 
+        System.out.println("Breaking furniture");
+
         Rotation rot = null;
         boolean inheritColor = false; Color color = Color.WHITE;
         // Destroy the initial item frame + block
-        for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0, 0.5), 0.2, 0.2, 0.2)) {
-            if(entity instanceof ItemFrame itemFrame) {
-
-                if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
-                    if(itemFrame.getItem().getType() == Material.TIPPED_ARROW) {
-                        PotionMeta potionMeta = (PotionMeta) itemFrame.getItem().getItemMeta();
+        for(Entity entity : location.getWorld().getNearbyEntities(location.add(0.5, 0.5, 0.5), 0.2, 0.2, 0.2)) {
+            if(entity instanceof ItemDisplay display) {
+                if(display.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
+                    if(display.getItemStack().getType() == Material.TIPPED_ARROW) {
+                        PotionMeta potionMeta = (PotionMeta) display.getItemStack().getItemMeta();
                         if(potionMeta != null) {
                             color = potionMeta.getColor();
                             inheritColor = true;
@@ -654,13 +627,15 @@ public class Furniture {
                                 location,
                                 player,
                                 location,
-                                itemFrame
+                                display
                                 );
                     }
 
-                    itemFrame.remove();
+                    System.out.println("Removing item display");
 
-                    rot = itemFrame.getRotation();
+                    display.remove();
+
+                    rot = Utils.rotationFromAngle(display.getLocation().getYaw());
 
                     location.getBlock().setType(Material.AIR);
 
@@ -680,9 +655,9 @@ public class Furniture {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rot);
 
             for(Entity entity : subModelLocation.getWorld().getNearbyEntities(subModelLocation, 0.2, 0.2, 0.2)) {
-                if(entity instanceof ItemFrame itemFrame) {
-                    if(itemFrame.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
-                        itemFrame.remove();
+                if(entity instanceof ItemDisplay ItemDisplay) {
+                    if(ItemDisplay.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
+                        ItemDisplay.remove();
 
                         subModelLocation.getBlock().setType(Material.AIR);
 
@@ -690,10 +665,10 @@ public class Furniture {
                             this.callFunction(
                                     blockBreakEvent,
                                     FunctionType.SUBMODEL_BREAK,
-                                    subModelLocation.clone().add(-0.5, 0, -0.5),
+                                    subModelLocation.clone().add(-0.5, 0.5, -0.5),
                                     player,
                                     originalLocation,
-                                    itemFrame
+                                    ItemDisplay
                             );
                         }
 
@@ -707,7 +682,7 @@ public class Furniture {
             // If the player isn't in creative, drop the item
             if (!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
                 if (!inheritColor)
-                    location.getWorld().dropItemNaturally(location.clone().add(-0.5, 0, -0.5), this.getDropItem());
+                    location.getWorld().dropItemNaturally(location.getBlock().getLocation(), this.getDropItem());
                 else {
                     ItemStack item = this.getDropItem();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -715,7 +690,7 @@ public class Furniture {
                         potionMeta.setColor(color);
                         item.setItemMeta(potionMeta);
                     }
-                    location.getWorld().dropItemNaturally(location.clone().add(-0.5, 0, -0.5), item);
+                    location.getWorld().dropItemNaturally(location.getBlock().getLocation(), item);
                 }
             }
         }

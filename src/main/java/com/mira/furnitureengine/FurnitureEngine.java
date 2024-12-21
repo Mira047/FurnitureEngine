@@ -43,7 +43,6 @@ public final class FurnitureEngine extends JavaPlugin {
 
         // Register events
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new HangingBreakListener(), this);
 
         // Register metrics
         new Metrics(this, 13146);

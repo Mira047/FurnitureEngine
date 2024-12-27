@@ -22,9 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +63,8 @@ public class Furniture {
     private final int modelData;
 
     private final RotSides rotSides;
+
+    private final Vector modelOffset;
 
     /* Advanced Furniture Data */
     private final List<SubModel> subModels = new ArrayList<>();
@@ -98,6 +103,8 @@ public class Furniture {
         }
 
         rotSides = RotSides.valueOf(plugin.getConfig().getInt("Furniture." + id + ".rotation"));
+
+        modelOffset = plugin.getConfig().getVector("Furniture." + id + ".model_offset", new Vector(0, 0, 0));
 
         // Get all submodels (object list)
         try {
@@ -450,7 +457,20 @@ public class Furniture {
                 display.setItemStack(item);
             }
 
-            display.setRotation(Utils.angleFromRotation(rotation), 0);
+            float angle = Utils.angleFromRotation(rotation);
+
+            display.setRotation(angle, 0);
+
+            if(modelOffset.lengthSquared() != 0) {
+                Vector3f offset = modelOffset.toVector3f().rotateY(angle);
+
+                display.setTransformation(new Transformation(
+                        offset,
+                        new Quaternionf(),
+                        new Vector3f(1, 1, 1),
+                        new Quaternionf()
+                ));
+            }
 
             display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
         });

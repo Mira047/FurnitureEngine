@@ -9,6 +9,7 @@ import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -104,7 +105,17 @@ public class Furniture {
 
         rotSides = RotSides.valueOf(plugin.getConfig().getInt("Furniture." + id + ".rotation"));
 
-        modelOffset = plugin.getConfig().getVector("Furniture." + id + ".model_offset", new Vector(0, 0, 0));
+        try {
+            modelOffset = plugin.getConfig().get("Furniture." + id + ".model_offset") instanceof MemorySection section ? new Vector(
+                    section.getDouble("x", 0),
+                    section.getDouble("y", 0),
+                    section.getDouble("z", 0)
+            ) : new Vector(0, 0, 0);
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to load model offset for furniture " + id + ". Error: " + e.getMessage());
+
+            throw new IllegalArgumentException("Failed to load model offset for furniture " + id + ". Error: " + e.getMessage());
+        }
 
         // Get all submodels (object list)
         try {
@@ -462,7 +473,7 @@ public class Furniture {
             display.setRotation(angle, 0);
 
             if(!modelOffset.isZero()) {
-                Vector3f offset = modelOffset.toVector3f().rotateY(angle);
+                Vector3f offset = modelOffset.toVector3f();
 
                 display.setTransformation(new Transformation(
                         offset,
@@ -707,7 +718,7 @@ public class Furniture {
             // If the player isn't in creative, drop the item
             if (!player.getGameMode().equals(GameMode.CREATIVE) && event.isDroppingItems()) {
                 if (!inheritColor)
-                    location.getWorld().dropItemNaturally(location.getBlock().getLocation(), this.getDropItem());
+                    location.getWorld().dropItem(location.getBlock().getLocation(), this.getDropItem());
                 else {
                     ItemStack item = this.getDropItem();
                     PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
@@ -715,7 +726,7 @@ public class Furniture {
                         potionMeta.setColor(color);
                         item.setItemMeta(potionMeta);
                     }
-                    location.getWorld().dropItemNaturally(location.getBlock().getLocation(), item);
+                    location.getWorld().dropItem(location.getBlock().getLocation(), item);
                 }
             }
         }

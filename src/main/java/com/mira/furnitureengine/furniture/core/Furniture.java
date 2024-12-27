@@ -461,7 +461,7 @@ public class Furniture {
 
             display.setRotation(angle, 0);
 
-            if(modelOffset.lengthSquared() != 0) {
+            if(!modelOffset.isZero()) {
                 Vector3f offset = modelOffset.toVector3f().rotateY(angle);
 
                 display.setTransformation(new Transformation(

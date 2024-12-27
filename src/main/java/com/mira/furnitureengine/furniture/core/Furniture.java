@@ -130,6 +130,8 @@ public class Furniture {
 
                     int modelData = map.get("model_data") instanceof Number number ? number.intValue() : 0;
 
+                    boolean visible = map.get("visible") instanceof Boolean b ? b : true;
+
                     if(offset == null || offset.lengthSquared() == 0) {
                         throw new IllegalArgumentException("Offset for a submodel of furniture " + id + " is null or 0. This is not allowed.");
                     }
@@ -137,7 +139,7 @@ public class Furniture {
                         throw new IllegalArgumentException("Model data for a submodel of furniture " + id + " is 0. This is not allowed.");
                     }
 
-                    subModels.add(new SubModel(offset, modelData));
+                    subModels.add(new SubModel(offset, modelData, visible));
                 }
             }
         } catch (Exception e) {

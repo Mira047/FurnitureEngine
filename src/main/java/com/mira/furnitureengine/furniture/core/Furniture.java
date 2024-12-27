@@ -382,7 +382,11 @@ public class Furniture {
         assert meta != null;
 
         meta.setCustomModelData(subModel.getCustomModelData());
-        meta.setItemModel(new NamespacedKey("furniture", id + "_submodel_" + subModels.indexOf(subModel)));
+        if(subModel.visible) {
+            meta.setItemModel(new NamespacedKey("furniture", id + "_submodel_" + subModels.indexOf(subModel)));
+        } else {
+            meta.setItemModel(new NamespacedKey("furniture", "empty");
+        }
 
         item.setItemMeta(meta);
 

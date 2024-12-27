@@ -11,10 +11,17 @@ import java.util.Map;
 public class SubModel implements ConfigurationSerializable {
     protected final Vector offset;
     protected final int model_data;
+    protected boolean visible = true;
 
     public SubModel(Vector offset, int customModelData) {
         this.offset = offset;
         this.model_data = customModelData;
+    }
+
+    public SubModel(Vector offset, int customModelData, boolean visible) {
+        this.offset = offset;
+        this.model_data = customModelData;
+        this.visible = visible;
     }
 
     public Vector getOffset() {
@@ -31,12 +38,13 @@ public class SubModel implements ConfigurationSerializable {
 
         map.put("offset", offset);
         map.put("model_data", model_data);
+        map.put("visible", visible);
 
         return map;
     }
 
     public static SubModel deserialize(Map<String, Object> map) {
-        return new SubModel((Vector) map.get("offset"), (int) map.get("model_data"));
+        return new SubModel((Vector) map.get("offset"), (int) map.get("model_data"), (boolean) map.getOrDefault("visible", true));
     }
 
     @Override
@@ -44,6 +52,7 @@ public class SubModel implements ConfigurationSerializable {
         return "SubModel{" +
                 "offset=" + offset +
                 ", model_data=" + model_data +
+                ", visible=" + visible +
                 '}';
     }
 }

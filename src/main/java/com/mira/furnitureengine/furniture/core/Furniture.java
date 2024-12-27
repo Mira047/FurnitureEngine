@@ -670,7 +670,7 @@ public class Furniture {
                             this.callFunction(
                                     blockBreakEvent,
                                     FunctionType.SUBMODEL_BREAK,
-                                    subModelLocation.clone().add(-0.5, 0.5, -0.5),
+                                    subModelLocation.clone().add(-0.5, 0, -0.5),
                                     player,
                                     originalLocation,
                                     ItemDisplay

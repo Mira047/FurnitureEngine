@@ -461,7 +461,7 @@ public class Furniture {
         }
 
         Block block = location.getBlock();
-        boolean isWaterlogged = (block.getType() == Material.WATER && ((Levelled) block.getBlockData()).getLevel() == 0) || block.getBlockData() instanceof Waterlogged;
+        boolean isWaterlogged = (block.getType() == Material.WATER && ((Levelled) block.getBlockData()).getLevel() == 0) || block.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged();
 
         // Set a barrier block at the location
         block.setType(Material.AIR);
@@ -522,7 +522,7 @@ public class Furniture {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
 
             Block subModelBlock = subModelLocation.getBlock();
-            boolean subModelWaterlogged = (subModelBlock.getType() == Material.WATER && ((Levelled) subModelBlock.getBlockData()).getLevel() == 0) || subModelBlock.getBlockData() instanceof Waterlogged;
+            boolean subModelWaterlogged = (subModelBlock.getType() == Material.WATER && ((Levelled) subModelBlock.getBlockData()).getLevel() == 0) || subModelBlock.getBlockData() instanceof Waterlogged waterlogged1 && waterlogged1.isWaterlogged();
 
             subModelLocation.getBlock().setType(Material.AIR);
             ItemDisplay subModelItemDisplay = subModelLocation.getWorld().spawn(subModelLocation, ItemDisplay.class, (display) -> {
@@ -592,7 +592,7 @@ public class Furniture {
         }
 
         Block block = location.getBlock();
-        boolean isWaterlogged = (block.getType() == Material.WATER && ((Levelled) block.getBlockData()).getLevel() == 0) || block.getBlockData() instanceof Waterlogged;
+        boolean isWaterlogged = (block.getType() == Material.WATER && ((Levelled) block.getBlockData()).getLevel() == 0) || block.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged();
 
         // Set a barrier block at the location
         location.getBlock().setType(Material.AIR);
@@ -646,7 +646,7 @@ public class Furniture {
             });
 
             Block subModelBlock = subModelLocation.getBlock();
-            boolean subModelWaterlogged = (subModelBlock.getType() == Material.WATER && ((Levelled) subModelBlock.getBlockData()).getLevel() == 0) || subModelBlock.getBlockData() instanceof Waterlogged;
+            boolean subModelWaterlogged = (subModelBlock.getType() == Material.WATER && ((Levelled) subModelBlock.getBlockData()).getLevel() == 0) || subModelBlock.getBlockData() instanceof Waterlogged waterlogged1 && waterlogged1.isWaterlogged();
 
             subModelLocation.getBlock().setType(Material.BARRIER);
 

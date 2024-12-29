@@ -8,7 +8,9 @@ import com.mira.furnitureengine.furniture.functions.FunctionManager;
 import com.mira.furnitureengine.furniture.functions.FunctionType;
 import com.mira.furnitureengine.utils.Utils;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
@@ -457,8 +459,11 @@ public class Furniture {
             return false;
         }
 
+        Block block = location.getBlock();
+        boolean isWaterlogged = block.getType() == Material.WATER || block.getBlockData() instanceof Waterlogged;
+
         // Set a barrier block at the location
-        location.getBlock().setType(Material.AIR);
+        block.setType(Material.AIR);
         // Spawn an item frame at the location
         ItemDisplay itemDisplay = location.getWorld().spawn(location, ItemDisplay.class, (display) -> {
             // Set the item frame's item to the generated item
@@ -507,10 +512,15 @@ public class Furniture {
         }
 
         location.getBlock().setType(Material.BARRIER);
+        Waterlogged waterlogged = (Waterlogged) location.getBlock().getBlockData();
+        waterlogged.setWaterlogged(isWaterlogged);
 
         // Now go thru all submodels and place them
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
+
+            Block subModelBlock = subModelLocation.getBlock();
+            boolean subModelWaterlogged = subModelBlock.getType() == Material.WATER || subModelBlock.getBlockData() instanceof Waterlogged;
 
             subModelLocation.getBlock().setType(Material.AIR);
             ItemDisplay subModelItemDisplay = subModelLocation.getWorld().spawn(subModelLocation, ItemDisplay.class, (display) -> {
@@ -532,6 +542,9 @@ public class Furniture {
             });
 
             subModelLocation.getBlock().setType(Material.BARRIER);
+
+            Waterlogged subModelWaterloggedData = (Waterlogged) subModelLocation.getBlock().getBlockData();
+            subModelWaterloggedData.setWaterlogged(subModelWaterlogged);
         }
 
         // play placing animation & remove item from hand (if not in creative)
@@ -575,6 +588,9 @@ public class Furniture {
             return false;
         }
 
+        Block block = location.getBlock();
+        boolean isWaterlogged = block.getType() == Material.WATER || block.getBlockData() instanceof Waterlogged;
+
         // Set a barrier block at the location
         location.getBlock().setType(Material.AIR);
         // Spawn an item frame at the location
@@ -599,6 +615,9 @@ public class Furniture {
 
         location.getBlock().setType(Material.BARRIER);
 
+        Waterlogged waterlogged = (Waterlogged) location.getBlock().getBlockData();
+        waterlogged.setWaterlogged(isWaterlogged);
+
         // Now go thru all submodels and place them
         for(SubModel subModel : subModels) {
             Location subModelLocation = Utils.getRelativeLocation(location, subModel.getOffset(), rotation);
@@ -622,7 +641,13 @@ public class Furniture {
                 display.getPersistentDataContainer().set(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER, Utils.getFurnitureFormatVersion());
             });
 
+            Block subModelBlock = subModelLocation.getBlock();
+            boolean subModelWaterlogged = subModelBlock.getType() == Material.WATER || subModelBlock.getBlockData() instanceof Waterlogged;
+
             subModelLocation.getBlock().setType(Material.BARRIER);
+
+            Waterlogged subModelWaterloggedData = (Waterlogged) subModelLocation.getBlock().getBlockData();
+            subModelWaterloggedData.setWaterlogged(subModelWaterlogged);
         }
 
         return true;
@@ -679,7 +704,10 @@ public class Furniture {
 
                     rot = Utils.rotationFromAngle(display.getLocation().getYaw());
 
-                    location.getBlock().setType(Material.AIR);
+                    Block block = location.getBlock();
+                    boolean isWaterlogged = ((Waterlogged) block.getBlockData()).isWaterlogged();
+
+                    location.getBlock().setType(isWaterlogged ? Material.WATER : Material.AIR);
 
                     break;
                 }
@@ -701,7 +729,10 @@ public class Furniture {
                     if(ItemDisplay.getPersistentDataContainer().has(new NamespacedKey(FurnitureEngine.getPlugin(FurnitureEngine.class), "format"), PersistentDataType.INTEGER)) {
                         ItemDisplay.remove();
 
-                        subModelLocation.getBlock().setType(Material.AIR);
+                        Block subModelBlock = subModelLocation.getBlock();
+                        boolean subModelWaterlogged = ((Waterlogged) subModelBlock.getBlockData()).isWaterlogged();
+
+                        subModelLocation.getBlock().setType(subModelWaterlogged ? Material.WATER : Material.AIR);
 
                         if(player!=null) {
                             this.callFunction(

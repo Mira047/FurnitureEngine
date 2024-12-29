@@ -76,7 +76,7 @@ public class PlayerInteractListener implements Listener {
 
             // Check if the item is a furniture item
             if (item.hasItemMeta() && item.getItemMeta().hasCustomModelData()) {
-                for (Furniture  furniture : FurnitureManager.getInstance().getFurniture()) {
+                for (Furniture furniture : FurnitureManager.getInstance().getFurniture()) {
                     if (Utils.itemsMatch(item, furniture.getGeneratedItem())) {
                         furniture.place(player, hand, Utils.calculatePlacingLocation(event.getClickedBlock(), event.getBlockFace()));
                         return;

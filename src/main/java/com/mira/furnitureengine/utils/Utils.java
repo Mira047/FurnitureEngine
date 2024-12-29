@@ -293,6 +293,8 @@ public class Utils {
         but you shouldn't be able to place furniture on them. So I made my own method.
      */
     public static boolean isSolid(Block block) {
+        if(block.getType() == Material.WATER) return false;
+
         if(block.getType().isSolid()) return true;
 
         else {

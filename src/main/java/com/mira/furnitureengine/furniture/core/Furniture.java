@@ -514,6 +514,7 @@ public class Furniture {
         location.getBlock().setType(Material.BARRIER);
         Waterlogged waterlogged = (Waterlogged) location.getBlock().getBlockData();
         waterlogged.setWaterlogged(isWaterlogged);
+        location.getBlock().setBlockData(waterlogged);
 
         // Now go thru all submodels and place them
         for(SubModel subModel : subModels) {
@@ -545,6 +546,7 @@ public class Furniture {
 
             Waterlogged subModelWaterloggedData = (Waterlogged) subModelLocation.getBlock().getBlockData();
             subModelWaterloggedData.setWaterlogged(subModelWaterlogged);
+            subModelLocation.getBlock().setBlockData(subModelWaterloggedData);
         }
 
         // play placing animation & remove item from hand (if not in creative)
@@ -617,6 +619,7 @@ public class Furniture {
 
         Waterlogged waterlogged = (Waterlogged) location.getBlock().getBlockData();
         waterlogged.setWaterlogged(isWaterlogged);
+        location.getBlock().setBlockData(waterlogged);
 
         // Now go thru all submodels and place them
         for(SubModel subModel : subModels) {
@@ -648,6 +651,7 @@ public class Furniture {
 
             Waterlogged subModelWaterloggedData = (Waterlogged) subModelLocation.getBlock().getBlockData();
             subModelWaterloggedData.setWaterlogged(subModelWaterlogged);
+            subModelLocation.getBlock().setBlockData(subModelWaterloggedData);
         }
 
         return true;
